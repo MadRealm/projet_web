@@ -2,7 +2,7 @@
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
-/../../../:\projet_insta\.idea/dataSources/
+/../../../../../../../../:\Users\simon\Desktop\IMT_A2\WebDev\ue_web_2020_example-session0\.idea/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
