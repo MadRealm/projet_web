@@ -12,13 +12,14 @@
     </head>
     <body>
 
-    <header>
-        <div>Delaygram:
-            <a href="{{ url_for("index") }}">Home</a> |
-            <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger" id="#">Ajouter une image</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <div>
+            <a href="{{ url_for("index") }}" class = "btn btn-primary" style = "border-color: purple; background-color: purple"> Delaygram </a>
+            <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger" id="2">Ajouter une image</a>
         </div>
         <hr/>
-    </header>
+    </nav>
 
 
 
