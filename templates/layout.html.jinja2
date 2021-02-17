@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Micro social network</title>
+    </head>
+    <body>
+
+    <header>
+        <div>Micro_social_network:
+            <a href="{{ url_for("index") }}">Home</a> |
+            <a href="{{ url_for("create_or_process_post") }}">Add new post</a>
+        </div>
+        <hr/>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+        {% block body %}
+        {% endblock %}
+        </main>
+    </div>
+    </body>
+</html>
