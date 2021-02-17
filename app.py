@@ -23,7 +23,6 @@ def index():
 @app.route("/posts/edit/", methods=["GET", "POST"])
 @app.route("/posts/edit/<post_id>", methods=["GET", "POST"])
 def create_or_process_post(post_id=None):
-
     # Fetch the corresponding post from the database. If no ID is provided,
     # then post will be 'None', and the form will consider this value
     # as a sign that a new post should be created
