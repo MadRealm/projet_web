@@ -3,6 +3,8 @@ _classes:
     class: User
   post: &post
     class: Post
+  comment: &comment
+    class: Comment
 
 user_jpastor:
   id: 1
@@ -26,6 +28,7 @@ post1:
   user_id: 1
   <<: *post
 post2:
+  id: 222
   title: Les Arthropodes
   content: Les Arthropodes (Arthropoda1) — du grec arthron « articulation » et podos « pied », aussi appelés « articulés » — sont un embranchement d'animaux protostomiens dont le plan d'organisation est caractérisé par un corps segmenté. Ils sont formés de métamères hétéronomes munis chacun d'une paire d'appendices articulés et recouvert d'une cuticule ou d'une carapace rigide, qui constitue leur exosquelette, dans la plupart des cas constitué de chitine. Leur mue permet, en changeant périodiquement leur squelette externe, de grandir en taille (mue de croissance) ou d'acquérir de nouveaux organes, voire de changer de forme (mue de métamorphose). Ils seraient apparus il y a 543 millions d'années (543 Ma).
   user_id: 2
@@ -35,3 +38,15 @@ post3:
   content: Le super-embranchement des Ecdysozoa, ou Ecdysozoaires, est un clade d'animaux représentant la division des protostomiens dont le développement s'effectue par une ou plusieurs mues cuticulaires. Le nom de ce taxon vient du mot « ecdysis », qui désigne la mue.
   user_id: 1
   <<: *post
+
+comment1:
+  content: le premier commentaire, le premier commentaire, le premier commentaire, le premier commentaire, le premier commentaire, le premier commentaire
+  user_id: 1
+  post_id: 222
+  <<: *comment
+
+comment2:
+  content: le deuxieme commentaire
+  user_id: 2
+  post_id: 222
+  <<: *comment

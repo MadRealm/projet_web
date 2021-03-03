@@ -1,0 +1,17 @@
+{% extends "layout.html.jinja2" %}
+{% from "forms.html.jinja2" import render_field %}
+
+{% block body %}
+    <form action="{{ url_for("comment_a_post", comment_id=comment.id) }}" method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            <label for="description" class="form-label">Commentaire</label>
+            <input type = "text" id = "description" class = "form-control">
+        </div>
+        <br>
+        <div class = "mb-3">
+            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
+        </div>
+
+    </form>
+{% endblock %}
