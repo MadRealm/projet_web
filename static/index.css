@@ -1,0 +1,15 @@
+body {
+  background-color: rebeccapurple;
+}
+.image-homepage {
+    background-color: rebeccapurple;
+    height: 500px;
+    width: 500px;
+
+
+}
+p {
+  font-family: verdana;
+  font-size: 20px;
+}
+.btn-danger{}
