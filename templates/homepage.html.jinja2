@@ -3,8 +3,8 @@
 {% block body %}
     <dl>
         {% for post in posts %}
-            <dt><b>{{ post.title }}</b> (edited by {{ post.author.username }})
-                {% if post.author.id == 1 %}
+            <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
+                {% if post.authorPost.id == 1 %}
                     <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
                     <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                 {% endif %}
@@ -13,20 +13,16 @@
             <dd>{{ post.content }}</dd>
             <dd>
                 <ul>Commentaires :
-                    {% if post.author.id != 1 %}
+                    {% if post.authorPost.id != 1 %}
                         <a href="{{ url_for("comment_a_post", post_id=post.id) }}"><b>add a comment</b></a>
                     {% endif %}
-                    {% for comment in comments %}
+                    {% for comment in post.comments %}
                     <li>
                         {% if comment.post_id == post.id %}
-                            {{ comment.parentPost.author.username }} a commenté : {{ comment.content }}
+                            {{ comment.authorComment.username }} a commenté : {{ comment.content }}
                         {% endif %}
-                        test
                     </li>
                     {% endfor %}
-                    <li>
-                        machin à commenté : whaouh !
-                    </li>
                 </ul>
             </dd>
         {% endfor %}

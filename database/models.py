@@ -7,7 +7,8 @@ class User(db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     # Relationship User <--> Post
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    posts = db.relationship('Post', backref='authorPost', lazy='dynamic')
+    comments = db.relationship('Comment', backref='authorComment', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -19,7 +20,7 @@ class Post(db.Model):
     content = db.Column(db.Text)
     # Relationship User <--> Post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comments = db.relationship('Comment', backref='parentPost', lazy='dynamic')
+    comments = db.relationship('Comment', back_populates='post')
 
 
 class Comment(db.Model):
@@ -27,5 +28,6 @@ class Comment(db.Model):
     content = db.Column(db.Text)
     # Relationship Post <--> Comment
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    post = db.relationship('Post', back_populates='comments')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
