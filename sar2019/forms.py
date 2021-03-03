@@ -6,3 +6,7 @@ from wtforms.validators import DataRequired, Email
 class PostEditForm(Form):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+
+
+class CommentForm(Form):
+    content = TextAreaField('Content', validators=[DataRequired()])

@@ -20,3 +20,13 @@ class Post(db.Model):
     image_data = db.Column(db.BLOB)
     # Relationship User <--> Post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref='parentPost', lazy='dynamic')
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    # Relationship Post <--> Comment
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
