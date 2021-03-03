@@ -1,4 +1,4 @@
-*.log
+.idea./*.log
 test.db
 celerybeat-schedule.db
 /.idea/*
