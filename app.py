@@ -4,6 +4,9 @@ from database.database import db, init_database
 import database.models
 from sar2019.config import Config
 from sar2019.forms import PostEditForm, CommentForm
+from sar2019.forms import PostEditForm
+from flask import request
+import base64
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -28,18 +31,28 @@ def create_or_process_post(post_id=None):
     # as a sign that a new post should be created
     post = database.models.Post.query.filter_by(id=post_id).first()
     form = PostEditForm(obj=post)
-
-    if form.validate_on_submit():
+    if request.method=='POST':
+        file = request.files['file']
+        if file.filename=='':
+            file=None
+    else :
+        file=None
+    if file != None:
         if post is None:
             post = database.models.Post()
             post.user_id = 1
         post.title = form.title.data
         post.content = form.content.data
+        post.image_data = base64.b64encode(file.read())
+        print(post.image_data)
         db.session.add(post)
         db.session.commit()
 
+
+
         return flask.redirect(flask.url_for('index'))
-    return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
+    else:
+        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
 
 
 @app.route("/posts/comment/", methods=["GET", "POST"])

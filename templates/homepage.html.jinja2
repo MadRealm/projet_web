@@ -9,7 +9,9 @@
                     <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                 {% endif %}
             </dt>
-            <dd>Image</dd>
+            <dd>Image
+                <img class="image-homepage"  src="data:;base64,{{ post.image_data.decode('ascii') }}"/>
+            </dd>
             <dd>{{ post.content }}</dd>
             <dd>
                 <ul>Commentaires :
@@ -24,6 +26,7 @@
                     </li>
                     {% endfor %}
                 </ul>
+
             </dd>
         {% endfor %}
     </dl>

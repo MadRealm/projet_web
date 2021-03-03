@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 import yaml
 import inspect
+from flask import request
+import base64
+#from PIL import Image
 
 db = SQLAlchemy()
-
 
 def init_database():
     db.create_all()
@@ -18,9 +20,10 @@ def populate_database():
 
     if not do_populate:
         return
-
+    '''
     with open("database/mock_data.yaml") as f:
-        mock_data = yaml.load(f)
+        mock_data = yaml.load(f,Loader=yaml.SafeLoader)
+        #mock_data = yaml.load(f)
         for mock_object_key, mock_object_dict in mock_data.items():
             if mock_object_key == "_classes":
                 continue
@@ -29,7 +32,11 @@ def populate_database():
             model_object = model_class()
 
             for attribute_name, attribute_name_value in mock_object_dict.items():
-                setattr(model_object, attribute_name, attribute_name_value)
+                if attribute_name=="image_data":
+                    setattr(model_object, attribute_name, base64.decodebytes(open(attribute_name_value).read()))
+                else:
+                    setattr(model_object, attribute_name, attribute_name_value)
 
             db.session.add(model_object)
         db.session.commit()
+    '''
