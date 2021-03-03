@@ -5,13 +5,15 @@
     <form action="{{ url_for("create_or_process_post", post_id=post.id) }}" method="post">
         {{ form.hidden_tag() }}
         <div class="mb-3">
-            <label for="formFile" class="form-label">Default file input example</label>
+            <label for="formFile" class="form-label">Sélectionnez l'image</label>
             <input class="form-control" type="file" id="formFile">
         </div>
         <div>
-
+            <label for="description" class="form-label">Description de l'image</label>
+            <input type = "text" id = "description" class = "form-control">
         </div>
-        <div class = "col-10">
+        <br>
+        <div class = "mb-3">
             <button type = "submit" class = "btn btn-primary"> Envoyer</button>
         </div>
 
