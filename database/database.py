@@ -7,14 +7,6 @@ import base64
 
 db = SQLAlchemy()
 
-#img=open("C:\Users\simon\PycharmProjects\projet_web\Images\Arthropodes.jpg")
-blob=base64.decodebytes(open("C:\\Users\\simon\\PycharmProjects\\projet_web\\Images\\Arthropodes.jpg", "rb").read())
-print(type(blob))
-print(blob)
-
-
-
-
 def init_database():
     db.create_all()
     populate_database()
