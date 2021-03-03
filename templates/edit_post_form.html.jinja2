@@ -3,15 +3,20 @@
 
 {% block body %}
     <form action="{{ url_for("create_or_process_post", post_id=post.id) }}" method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
+
         <div class="mb-3">
             <label for="formFile" class="form-label">Sélectionnez l'image</label>
             <input class="form-control" name="file" type="file" id="formFile">
         </div>
 
         <div>
+            <label for="description" class="form-label">Titre de l'image</label>
+            <input type = "text" name="title" id = "title" class = "form-control" value="{{ post.title }}">
+        </div>
+
+        <div>
             <label for="description" class="form-label">Description de l'image</label>
-            <input type = "text" id = "description" class = "form-control">
+            <input type = "text" name="description" id = "description" class = "form-control" value="{{ post.content }}">
         </div>
 
         <br>

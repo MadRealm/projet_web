@@ -30,7 +30,8 @@ def create_or_process_post(post_id=None):
     # then post will be 'None', and the form will consider this value
     # as a sign that a new post should be created
     post = database.models.Post.query.filter_by(id=post_id).first()
-    form = PostEditForm(obj=post)
+    form = request.form
+    #form = PostEditForm(obj=post)
     if request.method=='POST':
         file = request.files['file']
         if file.filename=='':
@@ -41,10 +42,10 @@ def create_or_process_post(post_id=None):
         if post is None:
             post = database.models.Post()
         post.user_id = 1
-        post.title = form.title.data
-        post.content = form.content.data
+        post.title = form.get("title","")
+        post.content = form.get("description","")
         post.image_data = base64.b64encode(file.read())
-        print(post.image_data)
+        #print(post.image_data)
         db.session.add(post)
         db.session.commit()
 
