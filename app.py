@@ -40,7 +40,7 @@ def create_or_process_post(post_id=None):
     if file != None:
         if post is None:
             post = database.models.Post()
-            post.user_id = 1
+        post.user_id = 1
         post.title = form.title.data
         post.content = form.content.data
         post.image_data = base64.b64encode(file.read())
