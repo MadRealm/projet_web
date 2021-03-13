@@ -3,10 +3,12 @@
 
 {% block body %}
     <form action="{{ url_for("comment_a_post", comment_id=comment.id) }}" method="post">
-        {{ form.hidden_tag() }}
+
         <div>
+            <input type="hidden" id="post_id" name="post_id" value="{{ post_id }}">
+
             <label for="description" class="form-label">Commentaire</label>
-            <input type = "text" id = "description" class = "form-control">
+            <input type = "text" name="description" id = "description" class = "form-control">
         </div>
         <br>
         <div class = "mb-3">

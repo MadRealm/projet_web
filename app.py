@@ -44,6 +44,8 @@ def create_or_process_post(post_id=None):
         post.user_id = 1
         post.title = form.get("title","")
         post.content = form.get("description","")
+        print(post.title)
+        print(post.content)
         post.image_data = base64.b64encode(file.read())
         #print(post.image_data)
         db.session.add(post)
@@ -55,23 +57,24 @@ def create_or_process_post(post_id=None):
     else:
         return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
 
-
-@app.route("/posts/comment/", methods=["GET", "POST"])
-def comment_a_post(comment_id=None):
-    comment = database.models.Post.query.filter_by(id=comment_id).first()
-    form = CommentForm(obj=comment)
-
-    if form.validate_on_submit():
+@app.route("/comment/", methods=["GET", "POST"])
+@app.route("/comment/<post_id>", methods=["GET", "POST"])
+#@app.route("/comment/<post_id>/<comment_id>", methods=["GET", "POST"])
+def comment_a_post(comment_id=None,post_id=None):
+    comment = database.models.Comment.query.filter_by(id=comment_id).first()
+    form = request.form
+    if request.method=='POST':
         if comment is None:
             comment = database.models.Comment()
-            comment.user_id = 1
-            comment.post_id = 2
-        comment.content = form.content.data
+
+        comment.user_id = 1
+        comment.post_id = form.get("post_id","")
+        comment.content = form.get("description","")
         db.session.add(comment)
         db.session.commit()
 
         return flask.redirect(flask.url_for('index'))
-    return flask.render_template('comment_post.html.jinja2', form=form, comment=comment)
+    return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
 
 
 @app.route("/posts/delete/<post_id>")
