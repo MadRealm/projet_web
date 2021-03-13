@@ -3,8 +3,6 @@ import flask
 from database.database import db, init_database
 import database.models
 from sar2019.config import Config
-from sar2019.forms import PostEditForm, CommentForm
-from sar2019.forms import PostEditForm
 from flask import request
 import base64
 
@@ -44,8 +42,8 @@ def create_or_process_post(post_id=None):
         post.user_id = 1
         post.title = form.get("title","")
         post.content = form.get("description","")
-        print(post.title)
-        print(post.content)
+        #print(post.title)
+        #print(post.content)
         post.image_data = base64.b64encode(file.read())
         #print(post.image_data)
         db.session.add(post)
@@ -81,6 +79,13 @@ def comment_a_post(comment_id=None,post_id=None):
 def delete_post(post_id=None):
     post = database.models.Post.query.filter_by(id=post_id).first()
     db.session.delete(post)
+    db.session.commit()
+    return flask.redirect(flask.url_for('index'))\
+
+@app.route("/comment/delete/<comment_id>")
+def delete_comment(comment_id=None):
+    comment = database.models.Comment.query.filter_by(id=comment_id).first()
+    db.session.delete(comment)
     db.session.commit()
     return flask.redirect(flask.url_for('index'))
 

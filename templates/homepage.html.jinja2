@@ -4,7 +4,7 @@
     <dl>
         {% for post in posts %}
             <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
-                {% if post.authorPost.id == 1 %}
+                {% if post.user_id == 1 %}
                     <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
                     <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                 {% endif %}
@@ -12,7 +12,7 @@
             <dd>Image
                 <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
             </dd>
-            <dd>{{ post.content }}</dd>
+            <dd>Description : {{ post.content }}</dd>
             <dd>
                 <ul>Commentaires :
                     {% if post.authorPost.id != 1 %}
@@ -21,8 +21,12 @@
                     {% for comment in post.comments %}
                     <li>
                         {% if comment.post_id == post.id %}
-                            {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                            {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
+                            {% if comment.user_id == 1 %}
+                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}">Supprimer</a>
+                            {% endif %}
                         {% endif %}
+
                     </li>
                     {% endfor %}
                 </ul>
