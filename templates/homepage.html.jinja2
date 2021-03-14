@@ -1,37 +1,41 @@
 {% extends "layout.html.jinja2" %}
 
 {% block body %}
-    <dl>
+    <dl style="display:grid; align-items: center; justify-content: center;">
         {% for post in posts %}
-            <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
-                {% if post.user_id == 1 %}
-                    <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
-                    <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
-                {% endif %}
-            </dt>
-            <dd>Image
-                <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
-            </dd>
-            <dd>Description : {{ post.content }}</dd>
-            <dd>
-                <ul>Commentaires :
-                    {% if post.authorPost.id != 1 %}
-                        <a href="{{ url_for("comment_a_post", post_id=post.id) }}"><b>add a comment</b></a>
+            <div class ="encadrement-post" style="background-color: white; margin: 30px; padding: 10px">
+                <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
+                    {% if post.user_id == 1 %}
+                        <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
+                        <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                     {% endif %}
-                    {% for comment in post.comments %}
-                    <li>
-                        {% if comment.post_id == post.id %}
-                            {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
-                            {% if comment.user_id == 1 %}
-                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}">Supprimer</a>
+                </dt>
+                <dd>
+                    <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
+                </dd>
+                <dd>Description : {{ post.content }}</dd>
+                <dd>
+                    <ul>
+                        {% for comment in post.comments %}
+                        <li>
+                            {% if comment.post_id == post.id %}
+                                {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
+                                {% if comment.user_id == 1 %}
+                                    <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-
-                    </li>
-                    {% endfor %}
-                </ul>
-
-            </dd>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                <div style="display: flex">
+                    {% if post.authorPost.id != 1 %}
+                        <img src="static/icon/smile.png" alt="smiley" style="width: 24px; align-content: flex-start">
+                        <div style="width: 20px;"></div>
+                        <a href="{{ url_for("comment_a_post", post_id=post.id) }}" style="color: darkgray; text-decoration: none"><b>Ajouter un commentaire ...</b></a>
+                    {% endif %}
+                </div>
+                </dd>
+            </div>
         {% endfor %}
     </dl>
 {% endblock %}
