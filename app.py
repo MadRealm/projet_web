@@ -60,19 +60,25 @@ def create_or_process_post(post_id=None):
 #@app.route("/comment/<post_id>/<comment_id>", methods=["GET", "POST"])
 def comment_a_post(comment_id=None,post_id=None):
     comment = database.models.Comment.query.filter_by(id=comment_id).first()
+    comments= database.models.Comment.query.all()
+    print(comments)
     form = request.form
+    print(post_id)
+    print(comment)
     if request.method=='POST':
         if comment is None:
             comment = database.models.Comment()
 
         comment.user_id = 1
-        comment.post_id = form.get("post_id","")
-        comment.content = form.get("description","")
+        comment.post_id = form.get("post_id")
+        comment.content = form.get("description")
+        post = database.models.Post.query.filter_by(id=post_id).first()
+        comment.post=post # permet de gérer le backpopulates de "post.comments"
         db.session.add(comment)
         db.session.commit()
 
         return flask.redirect(flask.url_for('index'))
-    return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
+    #return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
 
 
 @app.route("/posts/delete/<post_id>")
