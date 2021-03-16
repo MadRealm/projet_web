@@ -5,11 +5,25 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    password = db.Column(db.String(128))
+    authenticated = db.Column(db.Boolean, default=False)
     # Relationship User <--> Post
     posts = db.relationship('Post', backref='authorPost', lazy='dynamic')
     comments = db.relationship('Comment', backref='authorComment', lazy='dynamic')
 
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.email
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_anonymous(self):
+        return False
+
+    #c'est quoi ça ???
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
