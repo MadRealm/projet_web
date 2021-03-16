@@ -14,6 +14,7 @@
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
                 </dd>
                 <dd>Description : {{ post.content }}</dd>
+                <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
                 <dd>
                     <ul>
                         {% for comment in post.comments %}
@@ -29,19 +30,18 @@
                     </ul>
                 <div style="display: flex">
                     {% if post.authorPost.id != 1 %}
-                        <img src="static/icon/smile.png" alt="smiley" style="width: 24px; align-content: flex-start">
+                        <img src="static/icon/smile.png" alt="smiley" class="smile">
                         <div style="width: 20px;"></div>
-                        <a href="{{ url_for("comment_a_post", post_id=post.id) }}" style="color: darkgray; text-decoration: none"><b>Ajouter un commentaire ...</b></a>
-                        {# <form action="{{ url_for("comment_a_post", post_id=post.id) }}" method="post">
-                        {#                            <div>
-                        {#                                <input type="hidden" id="post_id" name="post_id" value="{{ post_id }}">
-                        {#
-                        {#                                <label for="description" class="form-label">Commentaire</label>
-                        {#                                <input type = "text" name="description" id = "description" class = "form-control">
-                        {#                            </div>
-                        {#                            <br>
-                        {#                            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
-                        {#                        </form> #}
+                         <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post">
+                                                    <div>
+                                                        <label for="description" class="form-label">Commentaire</label>
+                                                        <input type = "text" name="description" id = "description" class = "form-control">
+                                                    </div>
+                                                    <br>
+                                        <div>
+                                            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
+                                        </div>
+                         </form>
                     {% endif %}
                 </div>
                 </dd>

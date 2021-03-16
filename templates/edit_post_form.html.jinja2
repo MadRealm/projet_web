@@ -11,14 +11,17 @@
 
         <div>
             <label for="description" class="form-label">Titre de l'image</label>
-            <input type = "text" name="title" id = "title" class = "form-control" value="{{ post.title }}">
+            <input type = "text" name="title" id = "title" placeholder="Mon image" class = "form-control" value="{{ post.title }}">
         </div>
 
         <div>
             <label for="description" class="form-label">Description de l'image</label>
-            <input type = "text" name="description" id = "description" class = "form-control" value="{{ post.content }}">
+            <input type = "text" name="description" id = "description" placeholder ="Description de mon image" class = "form-control" value="{{ post.content }}">
         </div>
-
+        <div>
+            <label for="description" class ="form-label">Tags de l'image</label>
+            <input type ="text" name="tags" id = "tags" class="form-control" placeholder="image croissant kiwi le bon vieux temps" value="{{ post.tags }}">
+        </div>
         <br>
         <div class = "mb-3">
             <button type = "submit" class = "btn btn-primary"> Envoyer</button>

@@ -36,6 +36,8 @@ class Post(db.Model):
     # Relationship User <--> Post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', back_populates='post')
+    tags = db.Column(db.Text)
+    likes = db.Column(db.Integer)
 
 
 class Comment(db.Model):
