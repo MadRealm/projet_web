@@ -58,6 +58,8 @@ def create_or_process_post(post_id=None):
         post.user_id = 1
         post.title = form.get("title","")
         post.content = form.get("description","")
+        post.tags = form.get("tags")
+        post.likes = 0
         #print(post.title)
         #print(post.content)
         post.image_data = base64.b64encode(file.read())
@@ -191,6 +193,15 @@ def logout():
 def show_users():
     users_list = database.models.User.query.all()
     return render_template("users.html.jinja2", users_list=users_list)
+
+@app.route('/add_a_like/<post_id>', methods=["POST"])
+def add_a_like(post_id=None):
+    print(post_id)
+    post = database.models.Post.query.filter_by(id=post_id).first()
+    print(post)
+    post.likes += 1
+    db.session.commit()
+    return render_template("homepage.html.jinja2")
 
 
 if __name__ == '__main__':
