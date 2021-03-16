@@ -19,13 +19,14 @@
         <div class="d-grid col">
                 <a href="{{ url_for("index") }}" class = "btn btn-primary" role="button">Delaygram </a>
         </div>
-        <div class="d-grid col-6">
+        <div class="d-grid col-8">
             <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger " role ="button" id="2">Ajouter une image</a>
         </div>
-        <div class="input-group col">
-          <input type="text" class="form-control" placeholder="Rechercher ..." aria-label="Recipient's username" aria-describedby="button-addon2">
-          <a href="{{  url_for("search")  }}" class="btn btn-primary" role="button" id="button-addon2">Rechercher</a>
-        </div>
+        <form action="{{ url_for("search") }}" method="post">
+            <div class="input-group col">
+              <input type="text" class="form-control" placeholder="Rechercher ..." name="search_string" aria-describedby="button-addon2">
+              <button type = "submit" class = "btn btn-primary"> Rechercher</button>            </div>
+        </form>
         </div>
     </nav>
 

@@ -14,6 +14,8 @@ p {
 }
 .btn-danger{}
 
-.encadrement-post{
+#encadrement-post{
     background-color: white;
+    margin: 30px;
+    padding: 10px;
 }
