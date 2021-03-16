@@ -45,6 +45,7 @@ def create_or_process_post(post_id=None):
         post.title = form.get("title","")
         post.content = form.get("description","")
         post.tags = form.get("tags")
+        post.likes = 0
         #print(post.title)
         #print(post.content)
         post.image_data = base64.b64encode(file.read())

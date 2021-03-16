@@ -14,7 +14,7 @@
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
                 </dd>
                 <dd>Description : {{ post.content }}</dd>
-                <dd>Tags : {{ post.tags }}</dd>
+                <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
                 <dd>
                     <ul>
                         {% for comment in post.comments %}
