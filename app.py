@@ -31,8 +31,10 @@ def create_or_process_post(post_id=None):
     # as a sign that a new post should be created
     post = database.models.Post.query.filter_by(id=post_id).first()
     form = request.form
+    errors=[]
     #form = PostEditForm(obj=post)
     if request.method=='POST':
+        file = request.files['file']
         if post is None:
             post = database.models.Post()
         post.likes = 0
@@ -40,23 +42,23 @@ def create_or_process_post(post_id=None):
         post.title = form.get("title")
         post.content = form.get("description")
         post.tags = form.get("tags")
-        file = request.files['file']
+        if post.content=='':
+            errors.append("Donnez une description à votre image ; ")
+        if post.title=='':
+            errors.append("Donnez un titre à votre image ; ")
+        if post.tags=='':
+            errors.append("Associez des mots clés à votre image ; ")
         if file.filename=='':
-            file=None
-        else :
-            file=None
-        if file != None:
-
+            errors.append("Insérez une image ; ")
+        else:
             post.image_data = base64.b64encode(file.read())
+        if len(errors)==0:
             db.session.add(post)
             db.session.commit()
-
-
-
             return flask.redirect(flask.url_for('index'))
-        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
+        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=file, errors=errors)
     else:
-        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
+        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=None, errors=errors)
 
 
 @app.route("/comment/", methods=["GET", "POST"])
