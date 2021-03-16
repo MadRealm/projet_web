@@ -33,8 +33,6 @@
                         <div style="width: 20px;"></div>
                          <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post">
                                                     <div>
-                                                        <input type="hidden" id="post_id" name="post_id" value="{{ post_id }}">
-
                                                         <label for="description" class="form-label">Commentaire</label>
                                                         <input type = "text" name="description" id = "description" class = "form-control">
                                                     </div>
