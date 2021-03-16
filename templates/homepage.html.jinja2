@@ -3,7 +3,7 @@
 {% block body %}
     <dl style="display:grid; align-items: center; justify-content: center;">
         {% for post in posts %}
-            <div class ="encadrement-post" style="background-color: white; margin: 30px; padding: 10px">
+            <div id ="encadrement-post" style="">
                 <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
                     {% if post.user_id == 1 %}
                         <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
@@ -31,17 +31,16 @@
                     {% if post.authorPost.id != 1 %}
                         <img src="static/icon/smile.png" alt="smiley" style="width: 24px; align-content: flex-start">
                         <div style="width: 20px;"></div>
-                        <a href="{{ url_for("comment_a_post", post_id=post.id) }}" style="color: darkgray; text-decoration: none"><b>Ajouter un commentaire ...</b></a>
-                        {# <form action="{{ url_for("comment_a_post", post_id=post.id) }}" method="post">
-                        {#                            <div>
-                        {#                                <input type="hidden" id="post_id" name="post_id" value="{{ post_id }}">
-                        {#
-                        {#                                <label for="description" class="form-label">Commentaire</label>
-                        {#                                <input type = "text" name="description" id = "description" class = "form-control">
-                        {#                            </div>
-                        {#                            <br>
-                        {#                            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
-                        {#                        </form> #}
+                        {# <a href="{{ url_for("comment_a_post", post_id=post.id) }}" style="color: darkgray; text-decoration: none"><b>Ajouter un commentaire ...</b></a> #}
+                         <form action="{{ url_for("comment_a_post", post_id=post.id) }}" method="post">
+                             <div>
+                                 <input type="hidden" id="post_id" name="post_id" value="{{ post_id }}">
+                                 <label for="description" class="form-label">Commentaire</label>
+                                 <input type = "text" name="description" id = "description" class = "form-control">
+                             </div>
+                             <br>
+                             <button type = "submit" class = "btn btn-primary"> Envoyer</button>
+                         </form>
                     {% endif %}
                 </div>
                 </dd>

@@ -5,6 +5,7 @@ import database.models
 from sar2019.config import Config
 from flask import request
 import base64
+from sar2019.auxiliaire import parsing
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -55,6 +56,7 @@ def create_or_process_post(post_id=None):
     else:
         return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
 
+
 @app.route("/comment/", methods=["GET", "POST"])
 @app.route("/comment/<post_id>", methods=["GET", "POST"])
 #@app.route("/comment/<post_id>/<comment_id>", methods=["GET", "POST"])
@@ -82,6 +84,7 @@ def delete_post(post_id=None):
     db.session.commit()
     return flask.redirect(flask.url_for('index'))\
 
+
 @app.route("/comment/delete/<comment_id>")
 def delete_comment(comment_id=None):
     comment = database.models.Comment.query.filter_by(id=comment_id).first()
@@ -89,9 +92,12 @@ def delete_comment(comment_id=None):
     db.session.commit()
     return flask.redirect(flask.url_for('index'))
 
-@app.route("/search")
-def search(search_string=None):
-    search_result = database.models.Post.query.filter(search_string.in_(database.models.PostS.title))
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    form =request.form
+    search_string = form.get("search_string")
+    search_result = database.models.Post.query.filter(search_string in parsing(database.models.Post.tags))
     return flask.render_template("homepage.html.jinja2", posts=search_result)
 
 
