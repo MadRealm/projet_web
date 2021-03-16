@@ -3,7 +3,7 @@ def parsing (string):
     mot = ""
     for i in range(len(string)):
         mot += string[i]
-        if string[i] == " " :
+        if string[i] == ";" :
             l.add(mot)
             mot = ""
     return l

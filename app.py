@@ -18,6 +18,7 @@ with app.test_request_context():
 @app.route('/')
 def index():
     posts = database.models.Post.query.all()
+    print(posts)
     return flask.render_template("homepage.html.jinja2",
                                  posts=posts)
 
@@ -99,7 +100,8 @@ def delete_comment(comment_id=None):
 def search():
     form =request.form
     search_string = form.get("search_string")
-    search_result = database.models.Post.query.filter(search_string in parsing(database.models.Post.tags))
+    search_result = database.models.Post.query.filter((database.models.Post.tags.contains(search_string)))
+    print(search_result)
     return flask.render_template("homepage.html.jinja2", posts=search_result)
 
 
