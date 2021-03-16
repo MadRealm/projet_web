@@ -89,6 +89,11 @@ def delete_comment(comment_id=None):
     db.session.commit()
     return flask.redirect(flask.url_for('index'))
 
+@app.route("/search")
+def search(search_string=None):
+    search_result = database.models.Post.query.filter(search_string.in_(database.models.PostS.title))
+    return flask.render_template("homepage.html.jinja2", posts=search_result)
+
 
 if __name__ == '__main__':
     app.run()

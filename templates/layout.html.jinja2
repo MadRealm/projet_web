@@ -16,13 +16,17 @@
     <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark" style = "background-color:rebeccapurple">
-        <div class=" d-grid col-2">
-                <a href="{{ url_for("index") }}" class = "btn btn-primary" role="button" style =" background-color: purple; border-color:rebeccapurple" >Delaygram </a>
+        <div class="d-grid col">
+                <a href="{{ url_for("index") }}" class = "btn btn-primary" role="button">Delaygram </a>
         </div>
-        <div class="d-grid col-10">
+        <div class="d-grid col-6">
             <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger " role ="button" id="2">Ajouter une image</a>
         </div>
-
+        <div class="input-group col">
+          <input type="text" class="form-control" placeholder="Rechercher ..." aria-label="Recipient's username" aria-describedby="button-addon2">
+          <a href="{{  url_for("search")  }}" class="btn btn-primary" role="button" id="button-addon2">Rechercher</a>
+        </div>
+        </div>
     </nav>
 
 
