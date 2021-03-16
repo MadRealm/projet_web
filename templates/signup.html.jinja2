@@ -1,0 +1,36 @@
+{% extends "layout.html.jinja2" %}
+
+
+{% block body %}
+    <h2>Créer un compte</h2>
+
+    {#    Pour les messages d'erreurs#}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}. Go to <a href="{{ url_for('login') }}">login page</a>.
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email"
+                   aria-describedby="emailHelp"
+                   placeholder="Votre email" name="email">
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Pseudo</label>
+            <input type="text" class="form-control" id="username"
+                   aria-describedby="usernameHelp"
+                   placeholder="Votre Pseudo" name="username">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password"
+                   placeholder="Votre mot de passe">
+        </div>
+        <button type="submit" class="btn btn-primary">S'enregistrer</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.html.jinja2" %}
+
+
+{% block body %}
+    <h2>Login</h2>
+
+{#    Pour les messages d'erreurs#}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/login">
+        <div class="mb-3">
+            <label for="username" class="form-label">Pseudo</label>
+            <input type="text" class="form-control" id="username"
+                   aria-describedby="usernameHelp"
+                   placeholder="Votre Pseudo" name="username">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password"
+                   placeholder="Votre mot de passe">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+{% endblock %}

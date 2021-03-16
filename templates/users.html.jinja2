@@ -1,0 +1,13 @@
+{% extends "layout.html.jinja2" %}
+
+
+{% block body %}
+    <ul class="list-group">
+    {% for user in users_list %}
+     <li class="list-group-item">
+         <span>User: {{ user.username }} </span><br>
+         <span>Email: {{ user.email }}</span>
+     </li>
+    {% endfor %}
+</ul>
+{% endblock %}
