@@ -5,8 +5,14 @@ body {
     background-color: rebeccapurple;
     height: 500px;
     width: 500px;
-
-
+}
+.smile {
+  display: block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
+    vertical-align: center;
 }
 p {
   font-family: verdana;

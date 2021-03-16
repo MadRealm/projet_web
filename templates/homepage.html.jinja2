@@ -14,6 +14,7 @@
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
                 </dd>
                 <dd>Description : {{ post.content }}</dd>
+                <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
                 <dd>
                     <ul>
                         {% for comment in post.comments %}
@@ -29,7 +30,7 @@
                     </ul>
                 <div style="display: flex">
                     {% if post.authorPost.id != 1 %}
-                        <img src="static/icon/smile.png" alt="smiley" style="width: 24px; align-content: flex-start">
+                        <img src="static/icon/smile.png" alt="smiley" class="smile">
                         <div style="width: 20px;"></div>
                          <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post">
                                                     <div>
@@ -37,8 +38,8 @@
                                                         <input type = "text" name="description" id = "description" class = "form-control">
                                                     </div>
                                                     <br>
-                                        <div class = "mb-3">
-                                                    <button type = "submit" class = "btn btn-primary"> Envoyer</button>
+                                        <div>
+                                            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
                                         </div>
                          </form>
                     {% endif %}
