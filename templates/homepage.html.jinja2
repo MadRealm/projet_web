@@ -10,9 +10,12 @@
                         <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                     {% endif %}
                 </dt>
-                <dd>
+                <div class ="container-fluid">
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
-                </dd>
+                    <form>
+                        <button class="btn btn-primary button like" type ="submit">JADORE</button>
+                    </form>
+                </div>
                 <dd>Description : {{ post.content }}</dd>
                 <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
                 <dd>

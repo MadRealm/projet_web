@@ -25,3 +25,22 @@ p {
     margin: 30px;
     padding: 10px;
 }
+.container {
+  text-align: center;
+}
+.button like{
+  text-decoration: none;
+  background-color: rgba(236, 229, 167, 0.2);
+  border: 2px solid #e7dd84;
+  color: #e7dd84;
+  display: inline-block;
+  font-size: 1.5em;
+  padding: 8px;
+  transition: 0.35s;
+}
+.button like:hover {
+  text-decoration: none;
+  background-color: white;
+  border-color: white;
+  color: black;
+}
