@@ -55,7 +55,7 @@ def create_or_process_post(post_id=None):
     if file != None:
         if post is None:
             post = database.models.Post()
-        post.user_id = 1
+        post.user_id = current_user.id
         post.title = form.get("title","")
         post.content = form.get("description","")
         post.tags = form.get("tags")
@@ -66,12 +66,10 @@ def create_or_process_post(post_id=None):
         #print(post.image_data)
         db.session.add(post)
         db.session.commit()
-
-
-
         return flask.redirect(flask.url_for('index'))
     else:
         return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
+
 
 @app.route("/comment/", methods=["GET", "POST"])
 @app.route("/comment/<post_id>", methods=["GET", "POST"])
@@ -83,7 +81,7 @@ def comment_a_post(comment_id=None,post_id=None):
         if comment is None:
             comment = database.models.Comment()
 
-        comment.user_id = 1
+        comment.user_id = current_user.id
         comment.post_id = form.get("post_id","")
         comment.content = form.get("description","")
         db.session.add(comment)
@@ -120,9 +118,11 @@ def search(search_string=None):
 def profile():
     return render_template("profile.html.jinja2")
 
+
 @app.route('/signup', methods=["GET"])
 def signup_form():
     return render_template("signup.html.jinja2")
+
 
 @app.route('/signup', methods=["POST"])
 def signup():
@@ -186,7 +186,7 @@ def logout():
     db.session.add(user)
     db.session.commit()
     logout_user()
-    return render_template("homepage.html.jinja2")
+    return flask.redirect(flask.url_for('index'))
 
 
 @app.route('/users')

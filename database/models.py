@@ -14,6 +14,7 @@ class User(db.Model):
     def is_active(self):
         return True
 
+    #Pas nécesssairement utile
     def get_id(self):
         return self.email
 
