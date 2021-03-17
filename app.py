@@ -201,7 +201,7 @@ def add_a_like(post_id=None):
     print(post)
     post.likes += 1
     db.session.commit()
-    return render_template("homepage.html.jinja2")
+    return flask.redirect(flask.url_for('index'))
 
 
 if __name__ == '__main__':
