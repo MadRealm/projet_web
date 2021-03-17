@@ -5,7 +5,7 @@
         {% for post in posts %}
             <div class ="encadrement-post" style="background-color: white; margin: 30px; padding: 10px">
                 <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
-                    {% if post.user_id == 1 %}
+                    {% if post.user_id == current_user.id %}
                         <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
                         <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
                     {% endif %}
@@ -24,7 +24,7 @@
                         <li>
                             {% if comment.post_id == post.id %}
                                 {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
-                                {% if comment.user_id == 1 %}
+                                {% if comment.user_id == current_user.id %}
                                     <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
                                 {% endif %}
                             {% endif %}
@@ -32,7 +32,7 @@
                         {% endfor %}
                     </ul>
                 <div style="display: flex">
-                    {% if post.authorPost.id != 1 %}
+                    {% if post.authorPost.id != current_user.id %}
                         <img src="static/icon/smile.png" alt="smiley" class="smile">
                         <div style="width: 20px;"></div>
                          <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post">

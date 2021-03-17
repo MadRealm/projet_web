@@ -28,6 +28,17 @@
               <button type = "submit" class = "btn btn-primary"> Rechercher</button>            </div>
         </form>
         </div>
+        {% if current_user.is_authenticated %}
+            <div class="d-grid col">
+                <a href="{{ url_for("profile") }}" class = "btn btn-primary" role="button">Mon profil</a>
+                <a href="{{ url_for("logout") }}" class = "btn btn-primary" role="button">Se déconnecter</a>
+            </div>
+        {% else %}
+            <div class="d-grid col">
+                <a href="{{ url_for("signup") }}" class = "btn btn-primary" role="button">S'inscrire</a>
+                <a href="{{ url_for("login") }}" class = "btn btn-primary" role="button">Se connecter</a>
+            </div>
+        {% endif %}
     </nav>
 
 
