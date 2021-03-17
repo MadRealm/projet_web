@@ -2,7 +2,7 @@ from flask import Flask
 import flask
 from flask_login import login_required, logout_user, login_user, current_user, LoginManager
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from sqlalchemy.sql import func
 from database.database import db, init_database
 import database.models
 from sar2019.config import Config
@@ -53,6 +53,7 @@ def create_or_process_post(post_id=None):
     else :
         file=None
     if file != None:
+
         if post is None:
             post = database.models.Post()
         post.user_id = current_user.id
@@ -62,7 +63,11 @@ def create_or_process_post(post_id=None):
         post.likes = 0
         #print(post.title)
         #print(post.content)
-        post.image_data = base64.b64encode(file.read())
+        file2=file.read() #file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
+        post.image_data = base64.b64encode(file2)
+        size=len(file2)
+        post.image_size=size
+        #print(size)
         #print(post.image_data)
         db.session.add(post)
         db.session.commit()
@@ -119,7 +124,18 @@ def search():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template("profile.html.jinja2")
+    images_submited=current_user.posts.count()
+
+
+    size_submited=db.session.query(func.sum(database.models.Post.image_size)).filter_by(user_id=current_user.id).first()[0]
+    #print(size_submited)
+    size_total=db.session.query(func.sum(database.models.Post.image_size)).first()[0]
+    #print(size_total)
+    size_liked=None
+    images_total=database.models.Post.query.count()
+    images_liked=None
+    return flask.render_template("profile.html.jinja2", images_submited=images_submited, size_submited=size_submited,
+                                images_total=images_total,size_total=size_total, images_liked=images_liked, size_liked=size_liked)
 
 
 @app.route('/signup', methods=["GET"])
@@ -158,7 +174,7 @@ def signup():
     else:
         return "Rentrez tous les champs du formulaire s'il vous plait"
 
-    return profile()
+    return redirect(url_for('profile'))
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -178,7 +194,7 @@ def login():
     else:
         return render_template('login.html.jinja2')
     login_user(user)
-    return render_template('profile.html.jinja2')
+    return redirect(url_for('profile'))
 
 
 @app.route("/logout", methods=["GET"])

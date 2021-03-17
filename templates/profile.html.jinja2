@@ -6,4 +6,9 @@
 
     <p>Votre adresse email est : {{ current_user.email }}</p>
 
+    <div>
+        - Nombre d'images mises en ligne : {{ images_submited }} | {{ size_submited }} bytes<br>
+        - Nombre d'images total sur la plateforme : {{ images_total }} | {{ size_total }} bytes<br>
+        - Nombre d'images visionnées : {{ images_liked }} | {{ size_liked }} bytes
+    </div>
 {% endblock %}

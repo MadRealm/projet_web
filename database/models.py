@@ -34,6 +34,7 @@ class Post(db.Model):
     title = db.Column(db.Text)
     content = db.Column(db.Text)
     image_data = db.Column(db.BLOB)
+    image_size= db.Column(db.Integer)
     # Relationship User <--> Post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', back_populates='post')
