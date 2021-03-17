@@ -107,9 +107,12 @@ def delete_comment(comment_id=None):
     return flask.redirect(flask.url_for('index'))
 
 
-@app.route("/search")
-def search(search_string=None):
-    search_result = database.models.Post.query.filter(search_string.in_(database.models.PostS.title))
+@app.route("/search", methods=["POST"])
+def search():
+    form = request.form
+    search_string = form.get("search_string")
+    search_result = database.models.Post.query.filter((database.models.Post.tags.contains(search_string))).all()
+    print(search_result)
     return flask.render_template("homepage.html.jinja2", posts=search_result)
 
 
