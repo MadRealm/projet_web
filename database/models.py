@@ -9,6 +9,7 @@ class User(db.Model):
     authenticated = db.Column(db.Boolean, default=False)
     # Relationship User <--> Post
     posts = db.relationship('Post', backref='authorPost', lazy='dynamic')
+    liked_posts = db.relationship('Post', back_populates='likers_id')
     comments = db.relationship('Comment', backref='authorComment', lazy='dynamic')
 
     def is_active(self):
@@ -38,6 +39,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', back_populates='post')
     tags = db.Column(db.Text)
+    likers_id = db.relationship('User', back_populates='liked_posts')
     likes = db.Column(db.Integer)
 
 

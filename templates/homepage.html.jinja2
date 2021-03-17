@@ -12,8 +12,13 @@
                 </dt>
                 <div class ="container-fluid">
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
-                    <form action="{{ url_for("add_a_like", post_id=post.id )}}" method="post">
-                        <button class="btn btn-primary button like" type ="submit">JADORE</button>
+                    {{ current_user.posts.all() }}
+                    {{ post.likers_id.like_posts }}
+                    {{ any_function(current_user.posts.all(), post.likers_id.like_posts) }}
+                    <form action="{{ url_for("add_a_like", post_id=post.id) }}" method="post">
+                        {% if true %}
+                            <button class="btn btn-primary button like" type ="submit">JADORE</button>
+                        {% endif %}
                     </form>
                 </div>
                 <dd>Description : {{ post.content }}</dd>

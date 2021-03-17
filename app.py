@@ -198,14 +198,24 @@ def show_users():
     return render_template("users.html.jinja2", users_list=users_list)
 
 @app.route('/add_a_like/<post_id>', methods=["POST"])
+@login_required
 def add_a_like(post_id=None):
-    print(post_id)
     post = database.models.Post.query.filter_by(id=post_id).first()
-    print(post)
-    post.likes += 1
-    db.session.commit()
-    return flask.redirect(flask.url_for('index'))
+    if any(user_post in current_user.posts.all() for user_post in post.likers_id.liked_posts):
+        print("true")
+        return redirect(url_for('index'))
+    else:
+        post.likes += 1
+        db.session.commit()
+        return flask.redirect(flask.url_for('index'))
 
+
+def any_function(l1,l2):
+    return any(item in l1 for item in l2)
+
+
+app.jinja_env.globals.update(
+    any_function=any_function)
 
 if __name__ == '__main__':
     app.run()
