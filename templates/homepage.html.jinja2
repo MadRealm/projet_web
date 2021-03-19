@@ -1,20 +1,29 @@
 {% extends "layout.html.jinja2" %}
 
 {% block body %}
-    <dl style="display:grid; align-items: center; justify-content: center;">
+    <dl class="post-list" >
         {% for post in posts %}
-            <div class ="encadrement-post" style="background-color: white; margin: 30px; padding: 10px">
-                <dt><b>{{ post.title }}</b> (edited by {{ post.authorPost.username }})
+            <div class ="encadrement-post" >
+                <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
                     {% if post.user_id == current_user.id %}
-                        <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">edit</a> |
-                        <a href="{{ url_for("delete_post", post_id=post.id) }}">delete</a>
+                        <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
+                        <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
+                    {% elif current_user.is_authenticated %}
+                        {% if not current_user.is_following(post.authorPost) %}
+                            <form action="{{ url_for("follow", user_id=post.authorPost.id) }}" method="post">
+                                <button class="btn btn-primary button " type ="submit" >S'abonner</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for("unfollow", user_id=post.authorPost.id) }}" method="post">
+                                <button class="btn btn-primary button " type ="submit">Se désabonner</button>
+                            </form>
+                        {% endif %}
                     {% endif %}
                 </dt>
                 <div class ="container-fluid">
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
-                    {{ current_user.posts.all() }}
                     {{ post.likers_id.like_posts }}
-                    {{ any_function(current_user.posts.all(), post.likers_id.like_posts) }}
+{#                    {{ any_function(current_user.posts.all(), post.likers_id.like_posts) }}#}
                     <form action="{{ url_for("add_a_like", post_id=post.id) }}" method="post">
                         {% if true %}
                             <button class="btn btn-primary button like" type ="submit">JADORE</button>
@@ -28,7 +37,7 @@
                         {% for comment in post.comments %}
                         <li>
                             {% if comment.post_id == post.id %}
-                                {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
+                                {{ comment.authorComment.username }} a commenté : {{ comment.content }}
                                 {% if comment.user_id == current_user.id %}
                                     <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
                                 {% endif %}
@@ -36,19 +45,14 @@
                         </li>
                         {% endfor %}
                     </ul>
-                <div style="display: flex">
-                    {% if post.authorPost.id != current_user.id %}
-                        <img src="static/icon/smile.png" alt="smiley" class="smile">
-                        <div style="width: 20px;"></div>
-                         <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post">
-                                                    <div>
-                                                        <label for="description" class="form-label">Commentaire</label>
-                                                        <input type = "text" name="description" id = "description" class = "form-control">
-                                                    </div>
-                                                    <br>
-                                        <div>
-                                            <button type = "submit" class = "btn btn-primary"> Envoyer</button>
-                                        </div>
+                <div>
+                    {% if current_user.is_authenticated and post.authorPost.id != current_user.id %}
+                         <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
+{#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
+                            <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
+                            <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
+                            <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
+
                          </form>
                     {% endif %}
                 </div>

@@ -11,4 +11,70 @@
         - Nombre d'images total sur la plateforme : {{ images_total }} | {{ size_total }} bytes<br>
         - Nombre d'images visionnées : {{ images_liked }} | {{ size_liked }} bytes
     </div>
+
+    <br>
+    <br>
+
+    <h3>Mes abonnements : </h3>
+        <ul class="list-group">
+            {% for user in current_user.followed %}
+             <li class="list-group-item">
+                 <span>Pseudo: {{ user.followed.username }} </span><br>
+                 <span>Email: {{ user.followed.email }}</span>
+             </li>
+            {% endfor %}
+        </ul>
+
+
+    <br>
+    <br>
+
+    <h3>Mes followers : </h3>
+        <ul class="list-group">
+            {% for user in current_user.followers %}
+             <li class="list-group-item">
+                 <span>Pseudo: {{ user.follower.username }} </span><br>
+                 <span>Email: {{ user.follower.email }}</span>
+             </li>
+            {% endfor %}
+        </ul>
+
+    <br>
+    <br>
+
+    <h3>Mes Posts :</h3>
+    <dl class="post-list" style="display: flex" >
+    {% for post in current_user.posts %}
+        <div class ="encadrement-post" >
+            <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
+                {% if post.user_id == current_user.id %}
+                    <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
+                    <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
+                {% endif %}
+            </dt>
+            <div class ="container-fluid">
+                <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
+                {{ post.likers_id.like_posts }}
+{#                    {{ any_function(current_user.posts.all(), post.likers_id.like_posts) }}#}
+            </div>
+            <dd>Description : {{ post.content }}</dd>
+            <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
+            <dd>
+                <ul>
+                    {% for comment in post.comments %}
+                    <li>
+                        {% if comment.post_id == post.id %}
+                            {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
+                            {% if comment.user_id == current_user.id %}
+                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </div>
+    {% endfor %}
+    </dl>
+
 {% endblock %}

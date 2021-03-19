@@ -3,17 +3,17 @@
 
 {% block body %}
     <h2>Liste des utilisateurs</h2>
-    <ul class="list-group">
-    {% for user in users_list %}
-     <li class="list-group-item">
-        {% if current_user.id == user.id %}
-            <span style="font-weight: bold">Pseudo: {{ user.username }}</span><br>
-            <span style="font-weight: bold">Email: {{ user.email }}</span>
-        {% else %}
-            <span>Pseudo: {{ user.username }} </span><br>
-            <span>Email: {{ user.email }}</span>
-        {% endif %}
-     </li>
-    {% endfor %}
-</ul>
+        <ul class="list-group">
+            {% for user in users_list %}
+             <li class="list-group-item">
+                {% if current_user.id == user.id %}
+                    <span style="font-weight: bold">Pseudo: {{ user.username }}</span><br>
+                    <span style="font-weight: bold">Email: {{ user.email }}</span>
+                {% else %}
+                    <span>Pseudo: {{ user.follower.username }} </span><br>
+                    <span>Email: {{ user.email }}</span>
+                {% endif %}
+             </li>
+            {% endfor %}
+        </ul>
 {% endblock %}

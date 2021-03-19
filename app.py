@@ -87,7 +87,7 @@ def comment_a_post(comment_id=None,post_id=None):
             comment = database.models.Comment()
 
         comment.user_id = current_user.id
-        comment.post_id = form.get("post_id","")
+        comment.post_id = post_id
         comment.content = form.get("description","")
         db.session.add(comment)
         db.session.commit()
@@ -213,6 +213,7 @@ def show_users():
     users_list = database.models.User.query.all()
     return render_template("users.html.jinja2", users_list=users_list)
 
+
 @app.route('/add_a_like/<post_id>', methods=["POST"])
 @login_required
 def add_a_like(post_id=None):
@@ -228,6 +229,24 @@ def add_a_like(post_id=None):
 
 def any_function(l1,l2):
     return any(item in l1 for item in l2)
+
+
+@app.route('/follow/<user_id>', methods=["POST"])
+@login_required
+def follow(user_id=None):
+    user = database.models.Post.query.filter_by(id=user_id).first()
+    current_user.follow(user)
+    db.session.commit()
+    return flask.redirect(flask.url_for('index'))
+
+
+@app.route('/unfollow/<user_id>', methods=["POST"])
+@login_required
+def unfollow(user_id=None):
+    user = database.models.Post.query.filter_by(id=user_id).first()
+    current_user.unfollow(user)
+    db.session.commit()
+    return flask.redirect(flask.url_for('index'))
 
 
 app.jinja_env.globals.update(
