@@ -54,14 +54,14 @@
             </dt>
             <div class ="container-fluid">
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
-                    {% if current_user.is_authenticated %}
-                        {% if current_user.has_liked_post(post) %}
-                            <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}">Unlike</a>
-                        {% else %}
-                            <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}">Like</a>
-                        {% endif %}
-                    {% endif %}
                 </div>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.has_liked_post(post) %}
+                        <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}" class = "btn btn-primary" role = "button">Unlike</a>
+                    {% else %}
+                         <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
+                    {% endif %}
+                {% endif %}
             <dd>Description : {{ post.content }}</dd>
             <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
             <dd>
