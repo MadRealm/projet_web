@@ -21,17 +21,15 @@
                     {% endif %}
                 </dt>
                 <div class ="container-fluid">
-                    <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "bouh"/>
-                    {{ post.likers_id.like_posts }}
-{#                    {{ any_function(current_user.posts.all(), post.likers_id.like_posts) }}#}
-                    <form action="{{ url_for("add_a_like", post_id=post.id) }}" method="post">
-                        {% if true %}
-                            <button class="btn btn-primary button like" type ="submit">JADORE</button>
-                        {% endif %}
-                    </form>
+                    <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
+                    {% if current_user.has_liked_post(post) %}
+                        <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}">Unlike</a>
+                    {% else %}
+                        <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}">Like</a>
+                    {% endif %}
                 </div>
                 <dd>Description : {{ post.content }}</dd>
-                <dd>Tags : {{ post.tags }}      {{ post.likes }} Likes</dd>
+                <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
                 <dd>
                     <ul>
                         {% for comment in post.comments %}

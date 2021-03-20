@@ -60,7 +60,6 @@ def create_or_process_post(post_id=None):
         post.title = form.get("title","")
         post.content = form.get("description","")
         post.tags = form.get("tags")
-        post.likes = 0
         #print(post.title)
         #print(post.content)
         file2=file.read() #file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
@@ -214,20 +213,22 @@ def show_users():
     return render_template("users.html.jinja2", users_list=users_list)
 
 
-@app.route('/add_a_like/<post_id>', methods=["POST"])
+@app.route('/like_unlike/<post_id>/<action>', methods=["GET", "POST"])
 @login_required
-def add_a_like(post_id=None):
+def like_unlike(post_id=None, action=None):
     post = database.models.Post.query.filter_by(id=post_id).first()
-    if any(user_post in current_user.posts.all() for user_post in post.likers_id.liked_posts):
-        print("true")
-        return redirect(url_for('index'))
-    else:
-        post.likes += 1
+    if action == 'like':
+        postlike = database.models.Post.query.filter_by(user_id=current_user.id).all()
+        print(current_user.has_liked_post(post))
+        current_user.like_post(post)
         db.session.commit()
-        return flask.redirect(flask.url_for('index'))
+    if action == 'unlike':
+        current_user.unlike_post(post)
+        db.session.commit()
+    return redirect(request.referrer)
 
 
-def any_function(l1,l2):
+def any_function(l1, l2):
     return any(item in l1 for item in l2)
 
 
