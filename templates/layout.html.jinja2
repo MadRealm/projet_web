@@ -23,6 +23,10 @@
             <div class="d-grid col-8">
                 <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger " role ="button" id="2">Ajouter une image</a>
             </div>
+        {% else %}
+            <div class ="d-grid col-8">
+              <a href="{{ url_for("login") }}" class = "btn btn-danger" role="button">Se connecter</a>
+            </div>
         {% endif %}
         <form action="{{ url_for("search") }}" method="post">
             <div class="input-group col">
@@ -38,7 +42,6 @@
         {% else %}
             <div class="d-grid col">
                 <a href="{{ url_for("signup") }}" class = "btn btn-primary" role="button">S'inscrire</a>
-                <a href="{{ url_for("login") }}" class = "btn btn-primary" role="button">Se connecter</a>
             </div>
         {% endif %}
     </nav>
