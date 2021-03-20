@@ -32,19 +32,42 @@
                 {% endif %}
                 <dd>Description : {{ post.content }}</dd>
                 <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
+
+
                 <dd>
                     <ul>
+                        {% set i = namespace(value=0) %}
                         {% for comment in post.comments %}
-                        <li>
-                            {% if comment.post_id == post.id %}
+                           {% if i.value <= 2 %}
+                            <li>
                                 {{ comment.authorComment.username }} a commenté : {{ comment.content }}
                                 {% if comment.user_id == current_user.id %}
                                     <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
                                 {% endif %}
+                            </li>
                             {% endif %}
-                        </li>
+                            {% set i.value = i.value + 1 %}
                         {% endfor %}
+                        {% if post.comments|length >=3 %}
+                            {% set i.value = 0 %}
+                            <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
+                                <div id="voirPlus" class="collapse">
+                                {% for comment in post.comments %}
+                                    {% if i.value > 2 %}
+                                        <li>
+                                            {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                            {% if comment.user_id == current_user.id %}
+                                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% set i.value = i.value + 1 %}
+                                {% endfor %}
+                                </div>
+                        {% endif %}
                     </ul>
+
+
                 <div>
                     {% if current_user.is_authenticated and post.authorPost.id != current_user.id %}
                          <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
