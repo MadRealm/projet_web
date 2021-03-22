@@ -64,20 +64,52 @@
                 {% endif %}
             <dd>Description : {{ post.content }}</dd>
             <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
-            <dd>
-                <ul>
-                    {% for comment in post.comments %}
-                    <li>
-                        {% if comment.post_id == post.id %}
-                            {{ comment.authorComment.username }} a commenté : {{ comment.content }} |
-                            {% if comment.user_id == current_user.id %}
-                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                            <dd>
+                    <ul>
+                        {% set i = namespace(value=0) %}
+                        {% for comment in post.comments %}
+                           {% if i.value <= 2 %}
+                            <li>
+                                {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                {% if comment.user_id == current_user.id %}
+                                    <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                {% endif %}
+                            </li>
                             {% endif %}
+                            {% set i.value = i.value + 1 %}
+                        {% endfor %}
+                        {% if post.comments|length >3 %}
+                            {% set i.value = 0 %}
+                            <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
+                                <div id="voirPlus" class="collapse">
+                                {% for comment in post.comments %}
+                                    {% if i.value > 2 %}
+                                        <li>
+                                            {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                            {% if comment.user_id == current_user.id %}
+                                                <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% set i.value = i.value + 1 %}
+                                {% endfor %}
+                                </div>
                         {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </dd>
+                    </ul>
+
+
+                <div>
+                    {% if current_user.is_authenticated %}
+                         <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
+{#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
+                            <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
+                            <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
+                            <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
+
+                         </form>
+                    {% endif %}
+                </div>
+                </dd>
         </div>
     {% endfor %}
     </dl>

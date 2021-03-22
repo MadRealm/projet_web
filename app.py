@@ -84,15 +84,16 @@ def comment_a_post(comment_id=None,post_id=None):
     if request.method=='POST':
         if comment is None:
             comment = database.models.Comment()
+        comment.content = form.get("description", "")
+        if comment.content!="":
+            comment.user_id = current_user.id
+            comment.post_id = post_id
 
-        comment.user_id = current_user.id
-        comment.post_id = post_id
-        comment.content = form.get("description","")
-        db.session.add(comment)
-        db.session.commit()
+            db.session.add(comment)
+            db.session.commit()
 
-        return flask.redirect(flask.url_for('index'))
-    return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
+    return redirect(request.referrer)
+    #return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
 
 
 @app.route("/posts/delete/<post_id>")
@@ -100,7 +101,7 @@ def delete_post(post_id=None):
     post = database.models.Post.query.filter_by(id=post_id).first()
     db.session.delete(post)
     db.session.commit()
-    return flask.redirect(flask.url_for('index'))\
+    return redirect(request.referrer)
 
 
 @app.route("/comment/delete/<comment_id>")
@@ -108,7 +109,7 @@ def delete_comment(comment_id=None):
     comment = database.models.Comment.query.filter_by(id=comment_id).first()
     db.session.delete(comment)
     db.session.commit()
-    return flask.redirect(flask.url_for('index'))
+    return redirect(request.referrer)
 
 
 @app.route("/search", methods=["POST"])
