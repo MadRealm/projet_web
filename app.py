@@ -1,6 +1,7 @@
 from flask import Flask
 import flask
 from flask_login import login_required, logout_user, login_user, current_user, LoginManager
+from sqlalchemy import distinct
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import func
 from database.database import db, init_database
@@ -125,15 +126,17 @@ def search():
 @login_required
 def profile():
     images_submited=current_user.posts.count()
-
-
     size_submited=db.session.query(func.sum(database.models.Post.image_size)).filter_by(user_id=current_user.id).first()[0]
-    #print(size_submited)
+
+    images_total = database.models.Post.query.count()
     size_total=db.session.query(func.sum(database.models.Post.image_size)).first()[0]
-    #print(size_total)
-    size_liked= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike,database.models.PostLike.user_id==database.models.Post.user_id).filter(database.models.PostLike.user_id==current_user.id).first()[0]
-    images_total=database.models.Post.query.count()
-    images_liked=current_user.liked_posts.count()
+
+    size_liked= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(database.models.PostLike.user_id==current_user.id).first()[0]
+    #size_comentees= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(database.models.PostLike.user_id==current_user.id).first()[0]
+
+    images_liked=db.session.query(func.count(distinct(database.models.PostLike.post_id))).filter(database.models.PostLike.user_id==current_user.id).first()[0] #on compte les images likés par l'utilisateur en cours
+    #images_commentees=db.session.query(func.count(distinct(database.models.Post.id))).join(database.models.Comment).join(database.models.PostLike).filter(database.models.Comment.user_id==current_user.id).filter(database.models.PostLike.user_id!=current_user.id).first()[0] #on compte les images commentées non likées par l'utilisateur en cours
+
     return flask.render_template("profile.html.jinja2", images_submited=images_submited, size_submited=size_submited,
                                 images_total=images_total,size_total=size_total, images_liked=images_liked, size_liked=size_liked)
 
