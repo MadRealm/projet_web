@@ -48,7 +48,7 @@
                             {% endif %}
                             {% set i.value = i.value + 1 %}
                         {% endfor %}
-                        {% if post.comments|length >=3 %}
+                        {% if post.comments|length >3 %}
                             {% set i.value = 0 %}
                             <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
                                 <div id="voirPlus" class="collapse">
@@ -69,7 +69,7 @@
 
 
                 <div>
-                    {% if current_user.is_authenticated and post.authorPost.id != current_user.id %}
+                    {% if current_user.is_authenticated %}
                          <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
 {#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
                             <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
