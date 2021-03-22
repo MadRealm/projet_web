@@ -130,9 +130,9 @@ def profile():
     #print(size_submited)
     size_total=db.session.query(func.sum(database.models.Post.image_size)).first()[0]
     #print(size_total)
-    size_liked=None
+    size_liked= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike,database.models.PostLike.user_id==database.models.Post.user_id).filter(database.models.PostLike.user_id==current_user.id).first()[0]
     images_total=database.models.Post.query.count()
-    images_liked=None
+    images_liked=current_user.liked_posts.count()
     return flask.render_template("profile.html.jinja2", images_submited=images_submited, size_submited=size_submited,
                                 images_total=images_total,size_total=size_total, images_liked=images_liked, size_liked=size_liked)
 
