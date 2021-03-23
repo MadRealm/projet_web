@@ -15,7 +15,7 @@
     <br>
     <br>
 
-    <h3>Mes abonnements : </h3>
+    <h3>Mes abonnements : {{ current_user.followed.count() }} </h3>
         <ul class="list-group">
             {% for user in current_user.followed %}
              <li class="list-group-item">
@@ -29,7 +29,7 @@
     <br>
     <br>
 
-    <h3>Mes followers : </h3>
+    <h3>Mes followers : {{ current_user.followers.count() }}</h3>
         <ul class="list-group">
             {% for user in current_user.followers %}
              <li class="list-group-item">
@@ -42,7 +42,7 @@
     <br>
     <br>
 
-    <h3>Mes Posts :</h3>
+    <h3>Mes Posts : {{ current_user.posts.count() }} </h3>
     <dl class="post-list" style="display: flex" >
     {% for post in current_user.posts %}
         <div class ="encadrement-post" >

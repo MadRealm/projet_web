@@ -19,11 +19,11 @@ Conformément au cahier des charges, notre application permet à un utilisateur 
 * Faire des recherches par mots clefs pour afficher des images
 * Naviguer sur son profil et afficher le nombre d'images mis en ligne sur la plateforme et mis en ligne par l'utilisateur, la volumétrie est aussi accessible. Ainsi que le nombre d'images likées.
 
-Mais nous avons aussi ajouté des fonctionnalités plus avancées en commençant par mettre en place un module d'authentification. Ainsi, chaque personne le désirant peut se créer un compte utilisateur. Puis, chaque utilisateur peu se connecter à la plateforme pour pouvoir poster des posts, des commentaires, liker des images, s'abonner à d'autres utilisateurs, naviguer sur son profil (voir ses abonnements, ces abonnés et ses posts). Un utilisateur peut aussi afficher uniquement les posts de ses abonnés.
+Mais nous avons aussi ajouté des fonctionnalités plus avancées en commençant par mettre en place un module d'authentification. Ainsi, chaque personne le désirant peut se créer un compte utilisateur. Puis, chaque utilisateur peu se connecter à la plateforme pour pouvoir poster des posts, des commentaires, liker des images, s'abonner à d'autres utilisateurs, naviguer sur son profil (voir ses abonnements, ces abonnés et ses posts). 
 
 Des petits détails en plus :
 * Limiter à l'affichage de 3 commentaires sur le fil des posts pour éviter un surchargement inutile de l'interface. Puis, si l'on le souhaite, il est possible d'afficher le reste des autres commentaires.
-* 
+* Un utilisateur peut aussi afficher uniquement les posts de ses abonnés en se mettant dans l'onglet "Mon Réseau" dans la tab bar de la page d'accueil
 * 
 
 ## Structure du projet
