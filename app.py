@@ -211,12 +211,6 @@ def logout():
     return flask.redirect(flask.url_for('index'))
 
 
-@app.route('/users')
-def show_users():
-    users_list = database.models.User.query.all()
-    return render_template("users.html.jinja2", users_list=users_list)
-
-
 @app.route('/like_unlike/<post_id>/<action>', methods=["GET", "POST"])
 @login_required
 def like_unlike(post_id=None, action=None):

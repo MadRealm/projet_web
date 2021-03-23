@@ -62,26 +62,28 @@
                          <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
                     {% endif %}
                 {% endif %}
+                {{ post.likes.count() }} Likes
             <dd>Description : {{ post.content }}</dd>
-            <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
-                            <dd>
-                    <ul>
-                        {% set i = namespace(value=0) %}
-                        {% for comment in post.comments %}
-                           {% if i.value <= 2 %}
+            <dd>Tags : {{ post.tags }}</dd>
+
+            <dd>
+                <ul>
+                    {% set i = namespace(value=0) %}
+                    {% for comment in post.comments %}
+                       {% if i.value <= 2 %}
                             <li>
                                 {{ comment.authorComment.username }} a commenté : {{ comment.content }}
                                 {% if comment.user_id == current_user.id %}
                                     <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
                                 {% endif %}
                             </li>
-                            {% endif %}
-                            {% set i.value = i.value + 1 %}
-                        {% endfor %}
+                        {% endif %}
+                        {% set i.value = i.value + 1 %}
+                    {% endfor %}
                         {% if post.comments|length >3 %}
                             {% set i.value = 0 %}
                             <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
-                                <div id="voirPlus" class="collapse">
+                            <div id="voirPlus" class="collapse">
                                 {% for comment in post.comments %}
                                     {% if i.value > 2 %}
                                         <li>
@@ -93,7 +95,7 @@
                                     {% endif %}
                                     {% set i.value = i.value + 1 %}
                                 {% endfor %}
-                                </div>
+                            </div>
                         {% endif %}
                     </ul>
 
