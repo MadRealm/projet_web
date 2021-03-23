@@ -125,7 +125,8 @@
         id="MonReseau_"
         role="tabpanel"
         aria-labelledby="MonReseau">
-            <dl class="post-list" >
+          {% if current_user.is_authenticated %}
+              <dl class="post-list" >
                 {% for post in posts %}
                     {% if current_user.is_following(post.authorPost) %}
                         <div class ="encadrement-post" >
@@ -209,6 +210,7 @@
                     {% endif %}
                 {% endfor %}
             </dl>
+          {% endif %}
       </div>
     </div>
     <!-- Tabs content -->
