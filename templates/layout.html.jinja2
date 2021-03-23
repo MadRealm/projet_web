@@ -20,12 +20,15 @@
             <a href="{{ url_for("index") }}" class = "btn btn-primary" role="button">Delaygram </a>
         </div>
         {% if current_user.is_authenticated %}
-            <div class="d-grid col-8">
+            <div class="d-grid col-6">
                 <a href="{{ url_for("create_or_process_post")}}" class="btn btn-danger " role ="button" id="2">Ajouter une image</a>
             </div>
         {% else %}
-            <div class ="d-grid col-8">
+            <div class ="d-grid col-6">
               <a href="{{ url_for("login") }}" class = "btn btn-danger" role="button">Se connecter</a>
+            </div>
+            <div class="d-grid col">
+                <a href="{{ url_for("signup") }}" class = "btn btn-primary" role="button">S'inscrire</a>
             </div>
         {% endif %}
         <form action="{{ url_for("search") }}" method="post">
@@ -35,13 +38,11 @@
         </form>
         </div>
         {% if current_user.is_authenticated %}
-            <div class="d-grid col">
+            <div>
                 <a href="{{ url_for("profile") }}" class = "btn btn-primary" role="button">Mon profil</a>
-                <a href="{{ url_for("logout") }}" class = "btn btn-primary" role="button">Se déconnecter</a>
             </div>
-        {% else %}
-            <div class="d-grid col">
-                <a href="{{ url_for("signup") }}" class = "btn btn-primary" role="button">S'inscrire</a>
+            <div>
+                <a href="{{ url_for("logout") }}" class = "btn btn-primary" role="button">Se déconnecter</a>
             </div>
         {% endif %}
     </nav>
