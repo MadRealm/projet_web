@@ -57,3 +57,18 @@ p {
   border-color: white;
   color: black;
 }
+
+
+.nav-tabs {
+    border-bottom: 1px solid purple;
+    background-color: lightgray;
+}
+
+.nav-tabs .nav-link {
+    color: purple;
+}
+
+.nav-tabs .nav-link.active {
+    color: purple;
+    font-weight: bold;
+}

@@ -6,7 +6,7 @@
 * [Structure du projet](#Structure-du-projet)
 
 
-### Fonctionnalités
+## Fonctionnalités
 ***
 Notre projet intitulé Delygram est un système d'information comparable au service Instagram.
 
@@ -26,21 +26,40 @@ Des petits détails en plus :
 * 
 * 
 
-### Structure du projet
+## Structure du projet
 ***
- (contenu des différents fichiers)
-#### models.py
-Fichier dans lequel les différentes classes de la base de données sont déclarés avec tous leurs attributs. Nous avons 5 classes : Follow, User, Post, Comment, PostLike. A noter qu'un certain nombre de fonctions sont définies dans la classe User.
+(Résumé de la structure générale puis contenu des différents fichiers)
+
+### Fichier style
 
 #### index.css
  Fichier css dans lequel la mise en page d'éléments est réalisée. Que ce soit des classes ou des identifiants css.
 
+###Fichier python
+
+#### models.py
+Fichier dans lequel les différentes classes de la base de données sont déclarés avec tous leurs attributs. Nous avons 5 classes : Follow, User, Post, Comment, PostLike. A noter qu'un certain nombre de fonctions sont définies dans la classe User.
+
+
+
 #### app.py
 
+
+### Les templates
 
 #### homepage.html.jinja2
 Fichier qui correspond à la page d'accueil qui affiche les posts des utilisateurs dans l'ordre où ils ont été créés 
 
+#### layout.html.jinja2
+
+#### Boostrap.html.jinja2
+
+#### forms.html.jinja2
+
+#### edit_post_form.html.jinja2 ???
+
 #### profile.html.jinja2
 Fichier correspondant à la page du profil de l'utilisateur. ELle est accessible uniquement pour les utilisateurs connectés. Dans cette page est affiché le tableau de bord de l'utilisateurs, ses followers, ses followed et ses posts mis en ligne.
 
+#### signup.html.jinja2 et login.html.jinja2 
+Fichier au travers desquels il est possible de s'inscrire et de se connecter et ainsi avoir accès aux fonctionnalités d'un utilisateur de la plateforme. Dans ces fichiers des formulaires permettent de rentrer les information nécéssaires pour respectivement créer un utilisateur dans la base de données et de s'authentifier.

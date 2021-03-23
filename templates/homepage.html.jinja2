@@ -1,86 +1,299 @@
 {% extends "layout.html.jinja2" %}
 
 {% block body %}
-    <dl class="post-list" >
-        {% for post in posts %}
-            <div class ="encadrement-post" >
-                <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
-                    {% if post.user_id == current_user.id %}
-                        <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
-                        <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
-                    {% elif current_user.is_authenticated %}
-                        {% if not current_user.is_following(post.authorPost) %}
-                            <form action="{{ url_for("follow", user_id=post.authorPost.id) }}" method="post">
-                                <button class="btn btn-primary button " type ="submit" >S'abonner</button>
-                            </form>
+
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-justified mb-3" id="tab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="ToutLeMonde"
+          data-toggle="tab"
+          href="#ToutLeMonde_"
+          role="tab"
+          aria-controls="ToutLeMonde_"
+          aria-selected="true"
+          >Tous le monde</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="MonReseau"
+          data-toggle="tab"
+          href="#MonReseau_"
+          role="tab"
+          aria-controls="MonReseau_"
+          aria-selected="false"
+          >Mon réseau</a>
+      </li>
+    </ul>
+    <!-- Tabs navs -->
+
+    <!-- Tabs content -->
+    <div class="tab-content" id="tabcontent">
+      <div
+        class="tab-pane fade show active"
+        id="ToutLeMonde_"
+        role="tabpanel"
+        aria-labelledby="ToutLeMonde">
+            <dl class="post-list" >
+            {% for post in posts %}
+                <div class ="encadrement-post" >
+                    <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
+                        {% if post.user_id == current_user.id %}
+                            <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
+                            <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
+                        {% elif current_user.is_authenticated %}
+                            {% if not current_user.is_following(post.authorPost) %}
+                                <form action="{{ url_for("follow", user_id=post.authorPost.id) }}" method="post">
+                                    <button class="btn btn-primary button " type ="submit" >S'abonner</button>
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for("unfollow", user_id=post.authorPost.id) }}" method="post">
+                                    <button class="btn btn-primary button " type ="submit">Se désabonner</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </dt>
+                    <div class ="container-fluid">
+                        <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
+                    </div>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.has_liked_post(post) %}
+                            <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}" class = "btn btn-primary" role = "button">Unlike</a>
                         {% else %}
-                            <form action="{{ url_for("unfollow", user_id=post.authorPost.id) }}" method="post">
-                                <button class="btn btn-primary button " type ="submit">Se désabonner</button>
-                            </form>
+                             <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
                         {% endif %}
                     {% endif %}
-                </dt>
-                <div class ="container-fluid">
-                    <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
-                </div>
-                {% if current_user.is_authenticated %}
-                    {% if current_user.has_liked_post(post) %}
-                        <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}" class = "btn btn-primary" role = "button">Unlike</a>
-                    {% else %}
-                         <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
-                    {% endif %}
-                {% endif %}
-                <dd>Description : {{ post.content }}</dd>
-                <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
+                    <dd>Description : {{ post.content }}</dd>
+                    <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
 
 
-                <dd>
-                    <ul>
-                        {% set i = namespace(value=0) %}
-                        {% for comment in post.comments %}
-                           {% if i.value <= 2 %}
-                            <li>
-                                {{ comment.authorComment.username }} a commenté : {{ comment.content }}
-                                {% if comment.user_id == current_user.id %}
-                                    <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                    <dd>
+                        <ul>
+                            {% set i = namespace(value=0) %}
+                            {% for comment in post.comments %}
+                               {% if i.value <= 2 %}
+                                <li>
+                                    {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                    {% if comment.user_id == current_user.id %}
+                                        <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                    {% endif %}
+                                </li>
                                 {% endif %}
-                            </li>
+                                {% set i.value = i.value + 1 %}
+                            {% endfor %}
+                            {% if post.comments|length >3 %}
+                                {% set i.value = 0 %}
+                                <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
+                                    <div id="voirPlus" class="collapse">
+                                    {% for comment in post.comments %}
+                                        {% if i.value > 2 %}
+                                            <li>
+                                                {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                                {% if comment.user_id == current_user.id %}
+                                                    <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                        {% set i.value = i.value + 1 %}
+                                    {% endfor %}
+                                    </div>
                             {% endif %}
-                            {% set i.value = i.value + 1 %}
-                        {% endfor %}
-                        {% if post.comments|length >3 %}
-                            {% set i.value = 0 %}
-                            <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
-                                <div id="voirPlus" class="collapse">
-                                {% for comment in post.comments %}
-                                    {% if i.value > 2 %}
+                        </ul>
+
+
+                    <div>
+                        {% if current_user.is_authenticated %}
+                             <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
+    {#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
+                                <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
+                                <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
+                                <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
+
+                             </form>
+                        {% endif %}
+                    </div>
+                    </dd>
+                </div>
+            {% endfor %}
+        </dl>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="MonReseau_"
+        role="tabpanel"
+        aria-labelledby="MonReseau">
+            <dl class="post-list" >
+                {% for post in posts %}
+                    {% if post.authorPost in current_user.followed %}
+                        <div class ="encadrement-post" >
+                            <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
+                                {% if post.user_id == current_user.id %}
+                                    <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
+                                    <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
+                                {% elif current_user.is_authenticated %}
+                                    {% if not current_user.is_following(post.authorPost) %}
+                                        <form action="{{ url_for("follow", user_id=post.authorPost.id) }}" method="post">
+                                            <button class="btn btn-primary button " type ="submit" >S'abonner</button>
+                                        </form>
+                                    {% else %}
+                                        <form action="{{ url_for("unfollow", user_id=post.authorPost.id) }}" method="post">
+                                            <button class="btn btn-primary button " type ="submit">Se désabonner</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </dt>
+                            <div class ="container-fluid">
+                                <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
+                            </div>
+                            {% if current_user.is_authenticated %}
+                                {% if current_user.has_liked_post(post) %}
+                                    <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}" class = "btn btn-primary" role = "button">Unlike</a>
+                                {% else %}
+                                     <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
+                                {% endif %}
+                            {% endif %}
+                            <dd>Description : {{ post.content }}</dd>
+                            <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
+
+
+                            <dd>
+                                <ul>
+                                    {% set i = namespace(value=0) %}
+                                    {% for comment in post.comments %}
+                                       {% if i.value <= 2 %}
                                         <li>
                                             {{ comment.authorComment.username }} a commenté : {{ comment.content }}
                                             {% if comment.user_id == current_user.id %}
                                                 <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
                                             {% endif %}
                                         </li>
+                                        {% endif %}
+                                        {% set i.value = i.value + 1 %}
+                                    {% endfor %}
+                                    {% if post.comments|length >3 %}
+                                        {% set i.value = 0 %}
+                                        <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
+                                            <div id="voirPlus" class="collapse">
+                                            {% for comment in post.comments %}
+                                                {% if i.value > 2 %}
+                                                    <li>
+                                                        {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                                        {% if comment.user_id == current_user.id %}
+                                                            <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endif %}
+                                                {% set i.value = i.value + 1 %}
+                                            {% endfor %}
+                                            </div>
                                     {% endif %}
-                                    {% set i.value = i.value + 1 %}
-                                {% endfor %}
-                                </div>
-                        {% endif %}
-                    </ul>
+                                </ul>
 
 
-                <div>
-                    {% if current_user.is_authenticated %}
-                         <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
-{#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
-                            <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
-                            <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
-                            <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
+                            <div>
+                                {% if current_user.is_authenticated %}
+                                     <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
+            {#                             <img src="static/icon/smile.png" alt="smiley" class="smile">#}
+                                        <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
+                                        <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
+                                        <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
 
-                         </form>
+                                     </form>
+                                {% endif %}
+                            </div>
+                            </dd>
+                        </div>
                     {% endif %}
+                {% endfor %}
+            </dl>
+      </div>
+    </div>
+    <!-- Tabs content -->
+
+
+    <dl class="post-list" >
+        {% for post in posts %}
+            {% if current_user.is_following(post.authorPost) %}
+                <div class ="encadrement-post" >
+                    <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
+                        {% if post.user_id == current_user.id %}
+                            <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
+                            <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
+                        {% elif current_user.is_authenticated %}
+                            {% if not current_user.is_following(post.authorPost) %}
+                                <form action="{{ url_for("follow", user_id=post.authorPost.id) }}" method="post">
+                                    <button class="btn btn-primary button " type ="submit" >S'abonner</button>
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for("unfollow", user_id=post.authorPost.id) }}" method="post">
+                                    <button class="btn btn-primary button " type ="submit">Se désabonner</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </dt>
+                    <div class ="container-fluid">
+                        <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
+                    </div>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.has_liked_post(post) %}
+                            <a href="{{ url_for('like_unlike', post_id=post.id, action='unlike') }}" class = "btn btn-primary" role = "button">Unlike</a>
+                        {% else %}
+                             <a href="{{ url_for('like_unlike', post_id=post.id, action='like') }}" class = "btn btn-primary" role = "button">Like</a>
+                        {% endif %}
+                    {% endif %}
+                    <dd>Description : {{ post.content }}</dd>
+                    <dd>Tags : {{ post.tags }}      {{ post.likes.count() }} Likes</dd>
+
+
+                    <dd>
+                        <ul>
+                            {% set i = namespace(value=0) %}
+                            {% for comment in post.comments %}
+                               {% if i.value <= 2 %}
+                                <li>
+                                    {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                    {% if comment.user_id == current_user.id %}
+                                        <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                    {% endif %}
+                                </li>
+                                {% endif %}
+                                {% set i.value = i.value + 1 %}
+                            {% endfor %}
+                            {% if post.comments|length >3 %}
+                                {% set i.value = 0 %}
+                                <a href="#voirPlus" data-toggle="collapse">Voire plus de commentaires</a>
+                                    <div id="voirPlus" class="collapse">
+                                    {% for comment in post.comments %}
+                                        {% if i.value > 2 %}
+                                            <li>
+                                                {{ comment.authorComment.username }} a commenté : {{ comment.content }}
+                                                {% if comment.user_id == current_user.id %}
+                                                    <a href="{{ url_for("delete_comment", comment_id=comment.id) }}" style="color: darkred">Supprimer</a>
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                        {% set i.value = i.value + 1 %}
+                                    {% endfor %}
+                                    </div>
+                            {% endif %}
+                        </ul>
+
+
+                    <div>
+                        {% if current_user.is_authenticated %}
+                             <form action="{{ url_for("comment_a_post", post_id=post.id )}}" method="post" style="display:grid; grid-template-columns: repeat(5, 1fr);">
+                                <label for="description" class="form-label" style="align-self: center; margin-right: 10px">Commentaire :</label>
+                                <input type = "text" name="description" id = "description" class = "form-control" style="grid-column-start: 2; grid-column-end: 5">
+                                <button type = "submit" class = "btn btn-primary" style="margin-left: 10px"> Envoyer</button>
+
+                             </form>
+                        {% endif %}
+                    </div>
+                    </dd>
                 </div>
-                </dd>
-            </div>
+            {% endif %}
         {% endfor %}
     </dl>
 {% endblock %}
