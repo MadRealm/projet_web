@@ -8,7 +8,7 @@
 
 ## Fonctionnalités
 ***
-Notre projet intitulé Delygram est un système d'information comparable au service Instagram.
+Notre projet intitulé Delaygram est un système d'information comparable au service Instagram.
 
 Conformément au cahier des charges, notre application permet à un utilisateur de :
 * Sauvegarder des images en y associant une description et des mots clés
@@ -38,25 +38,25 @@ Des petits détails en plus :
 ###Fichier python
 
 #### models.py
-Fichier dans lequel les différentes classes de la base de données sont déclarés avec tous leurs attributs. Nous avons 5 classes : Follow, User, Post, Comment, PostLike. A noter qu'un certain nombre de fonctions sont définies dans la classe User.
+Fichier dans lequel les différentes classes de la base de données sont déclarés avec tous leurs attributs. Nous avons 5 classes : Follow, User, Post, Comment, PostLike. On définit également des propriétés sur chaque classe, qui sont en fait des fonctions et nous permette de définir des méthodes qu'on peut appliquer sur chaque élément de la base de données.
 
 
 
 #### app.py
-
+C'est le fichier principal de notre serveur, l'éxecution d'app.py commence par créer la database si elle n'existe pas, puis elle va définir toutes les fonctions qui sont utilisées par notre serveur. Les @ avant chaque fonction permettent de paramétrer la fonction côté serveur, par ex : @app.route va definir l'url à partir de la racine où la fonction définie en dessous est appelée. C'est donc ici que sont programmées toutes les actions importantes comme poster/supprimer un post ou un commentaire, liker/unliker etc ...
 
 ### Les templates
+
+#### layout.html.jinja2
+C'est le template qui est réutilisé dans tous les autres, il contient la barre de navigation avec les différentes fonctionnalités de la navbar, et permet ainsi de l'afficher sur toutes les pages du site sans avoir à recopier le code
 
 #### homepage.html.jinja2
 Fichier qui correspond à la page d'accueil qui affiche les posts des utilisateurs dans l'ordre où ils ont été créés 
 
-#### layout.html.jinja2
-
-#### Boostrap.html.jinja2
-
 #### forms.html.jinja2
 
-#### edit_post_form.html.jinja2 ???
+#### edit_post_form.html.jinja2 
+Fichier correspondant à la vue permettant de créer un pôst, on affiche simplement un formulaire avec toutes les informations que l'utilisateur doit remplir pour poster une image
 
 #### profile.html.jinja2
 Fichier correspondant à la page du profil de l'utilisateur. ELle est accessible uniquement pour les utilisateurs connectés. Dans cette page est affiché le tableau de bord de l'utilisateurs, ses followers, ses followed et ses posts mis en ligne.
