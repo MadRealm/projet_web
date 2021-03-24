@@ -9,14 +9,4 @@ db = SQLAlchemy()
 
 def init_database():
     db.create_all()
-    populate_database()
 
-
-def populate_database():
-    import database.models
-
-    model_classes = [model_class for (model_name, model_class) in inspect.getmembers(database.models, inspect.isclass)]
-    do_populate = sum([len(c.query.all()) for c in model_classes]) == 0
-
-    if not do_populate:
-        return

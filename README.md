@@ -43,7 +43,13 @@ Fichier dans lequel les différentes classes de la base de données sont déclar
 
 
 #### app.py
-C'est le fichier principal de notre serveur, l'éxecution d'app.py commence par créer la database si elle n'existe pas, puis elle va définir toutes les fonctions qui sont utilisées par notre serveur. Les @ avant chaque fonction permettent de paramétrer la fonction côté serveur, par ex : @app.route va definir l'url à partir de la racine où la fonction définie en dessous est appelée. C'est donc ici que sont programmées toutes les actions importantes comme poster/supprimer un post ou un commentaire, liker/unliker etc ...
+C'est le fichier principal de notre serveur, l'exécution d'app.py commence par créer la database si elle n'existe pas, puis elle va définir toutes les fonctions qui sont utilisées par notre serveur. Les @ avant chaque fonction permettent de paramétrer la fonction côté serveur, par ex : @app.route va definir l'url à partir de la racine où la fonction définie en dessous est appelée. C'est donc ici que sont programmées toutes les actions importantes comme poster/supprimer un post ou un commentaire, liker/unliker etc ...
+
+#### database.py
+Un fichier qui s'occupe de générer un fichier database.db si nous avons eu besoin d'effacer la base de données entièrement. La nouvelle database n'est pas repeuplée puisque c'est les utilisateurs qui vont venir ajouter du contenu par eux-mêmes une fois le site lancé.
+
+#### auxiliaire.py
+C'est un cours fichier censé accueillir des fonctions auxiliaires pour alléger le code d'app.py. Dans la version finale de notre site, le fichier contient une seule fonction qui permet d'aider la recherche de posts par mots clés.
 
 ### Les templates
 
@@ -51,9 +57,7 @@ C'est le fichier principal de notre serveur, l'éxecution d'app.py commence par 
 C'est le template qui est réutilisé dans tous les autres, il contient la barre de navigation avec les différentes fonctionnalités de la navbar, et permet ainsi de l'afficher sur toutes les pages du site sans avoir à recopier le code
 
 #### homepage.html.jinja2
-Fichier qui correspond à la page d'accueil qui affiche les posts des utilisateurs dans l'ordre où ils ont été créés 
-
-#### forms.html.jinja2
+Fichier qui correspond à la page d'accueil qui affiche les posts des utilisateurs dans l'ordre où ils ont été créés
 
 #### edit_post_form.html.jinja2 
 Fichier correspondant à la vue permettant de créer un pôst, on affiche simplement un formulaire avec toutes les informations que l'utilisateur doit remplir pour poster une image

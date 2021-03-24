@@ -20,20 +20,8 @@ class User(db.Model):
     followers = db.relationship('Follow', foreign_keys=[Follow.followed_id], backref="followed", lazy='dynamic')
     followed = db.relationship('Follow', foreign_keys=[Follow.follower_id], backref="follower", lazy='dynamic')
 
-
-    def is_active(self):
-        return True
-
-    #Pas nécesssairement utile
-    def get_id(self):
-        return self.email
-
     def is_authenticated(self):
         return self.authenticated
-
-    def is_anonymous(self):
-        return False
-
 
     def is_following(self, user):
         if user.id is None:
@@ -71,24 +59,25 @@ class User(db.Model):
             PostLike.user_id == self.id,
             PostLike.post_id == post.id).count() > 0
 
-    #c'est quoi ça ???
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-
 
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
+    # Pour stocker l'image sous une suite de bytes BLOB. On encode l'encode en BLOB (app.py), elle est stocké dans la
+    # database, puis elle sera décodé en BLOB lors de son affichage (homepage.html.jinja2)
     image_data = db.Column(db.BLOB)
-    image_size= db.Column(db.Integer)
+    image_size = db.Column(db.Integer)
+    tags = db.Column(db.Text)
     # Relationship User <--> Post
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # Relationship Comment <--> Post
+    # back-populates permet que lorsqu'on ajoute un commentaire il est aussi ajouté dans l'attribut comment de post
     comments = db.relationship('Comment', back_populates='post')
-    tags = db.Column(db.Text)
-    # Relationship Like <--> Post
+    # Relationship PostLike <--> Post
+    # backref <=> comment on appel l'attribut de la jointure ici comment.post
     likes = db.relationship('PostLike', backref='post', lazy='dynamic')
 
 
@@ -103,7 +92,6 @@ class Comment(db.Model):
 
 
 class PostLike(db.Model):
-    __tablename__ = 'post_like'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
