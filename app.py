@@ -46,7 +46,6 @@ def create_or_process_post(post_id=None):
     # as a sign that a new post should be created
     post = database.models.Post.query.filter_by(id=post_id).first()
     form = request.form
-    #form = PostEditForm(obj=post)
     if request.method=='POST':
         file = request.files['file']
         if file.filename=='':
@@ -58,17 +57,12 @@ def create_or_process_post(post_id=None):
         if post is None:
             post = database.models.Post()
         post.user_id = current_user.id
-        post.title = form.get("title","")
         post.content = form.get("description","")
         post.tags = form.get("tags")
-        #print(post.title)
-        #print(post.content)
         file2=file.read() #file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
         post.image_data = base64.b64encode(file2)
         size=len(file2)
         post.image_size=size
-        #print(size)
-        #print(post.image_data)
         db.session.add(post)
         db.session.commit()
         return flask.redirect(flask.url_for('index'))
@@ -94,7 +88,6 @@ def comment_a_post(comment_id=None,post_id=None):
             db.session.commit()
 
     return redirect(request.referrer)
-    #return flask.render_template('comment_post.html.jinja2', post_id=post_id,form=form, comment=comment)
 
 
 @app.route("/posts/delete/<post_id>")
@@ -132,10 +125,7 @@ def profile():
     size_total=db.session.query(func.sum(database.models.Post.image_size)).first()[0]
 
     size_liked= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(database.models.PostLike.user_id==current_user.id).first()[0]
-    #size_comentees= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(database.models.PostLike.user_id==current_user.id).first()[0]
-
-    images_liked=db.session.query(func.count(distinct(database.models.PostLike.post_id))).filter(database.models.PostLike.user_id==current_user.id).first()[0] #on compte les images likés par l'utilisateur en cours
-    #images_commentees=db.session.query(func.count(distinct(database.models.Post.id))).join(database.models.Comment).join(database.models.PostLike).filter(database.models.Comment.user_id==current_user.id).filter(database.models.PostLike.user_id!=current_user.id).first()[0] #on compte les images commentées non likées par l'utilisateur en cours
+    images_liked=db.session.query(func.count(distinct(database.models.PostLike.post_id))).filter(database.models.PostLike.user_id==current_user.id).first()[0]
 
     return flask.render_template("profile.html.jinja2", images_submited=images_submited, size_submited=size_submited,
                                 images_total=images_total,size_total=size_total, images_liked=images_liked, size_liked=size_liked)

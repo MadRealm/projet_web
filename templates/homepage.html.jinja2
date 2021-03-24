@@ -40,7 +40,7 @@
             <dl class="post-list" >
             {% for post in posts %}
                 <div class ="encadrement-post" >
-                    <dt><b>{{ post.title }}</b> {{ post.authorPost.username }}
+                    <dt> {{ post.authorPost.username }}
                         {% if post.user_id == current_user.id %}
                             <a href="{{ url_for("create_or_process_post", post_id=post.id) }}">modifier</a> |
                             <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
