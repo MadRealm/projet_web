@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 from database.database import db, init_database
 import database.models
 from sar2019.config import Config
-from flask import request, render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash
 import base64
 
 app = Flask(__name__)

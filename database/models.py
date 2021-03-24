@@ -20,6 +20,12 @@ class User(db.Model):
     followers = db.relationship('Follow', foreign_keys=[Follow.followed_id], backref="followed", lazy='dynamic')
     followed = db.relationship('Follow', foreign_keys=[Follow.follower_id], backref="follower", lazy='dynamic')
 
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.email
+
     def is_authenticated(self):
         return self.authenticated
 
