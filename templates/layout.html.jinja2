@@ -16,7 +16,7 @@
     <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark" style = "background-color:rebeccapurple">
-        <div class="d-grid col-2">
+        <div class="d-grid col">
             <a href="{{ url_for("index") }}" class = "btn btn-primary" role="button">Delaygram </a>
         </div>
         {% if current_user.is_authenticated %}
@@ -32,16 +32,16 @@
             </div>
         {% endif %}
         <form action="{{ url_for("search") }}" method="post">
-            <div class="input-group">
+            <div class="input-group col">
               <input type="text" class="form-control" placeholder="Rechercher ..." name="search_string" aria-describedby="button-addon2">
               <button type = "submit" class = "btn btn-primary"> Rechercher</button>            </div>
         </form>
         </div>
         {% if current_user.is_authenticated %}
-            <div class="d-grid col-1">
+            <div class="col d-grid">
                 <a href="{{ url_for("profile") }}" class = "btn btn-primary" role="button">Mon profil</a>
             </div>
-            <div>
+            <div class="col d-grid">
                 <a href="{{ url_for("logout") }}" class = "btn btn-primary" role="button">Se déconnecter</a>
             </div>
         {% endif %}
