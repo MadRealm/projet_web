@@ -46,28 +46,32 @@ def create_or_process_post(post_id=None):
     # as a sign that a new post should be created
     post = database.models.Post.query.filter_by(id=post_id).first()
     form = request.form
+    errors = []
     if request.method=='POST':
-        file = request.files['file']
-        if file.filename=='':
-            file=None
-    else :
-        file=None
-    if file != None:
-
         if post is None:
             post = database.models.Post()
+        file = request.files['file']
         post.user_id = current_user.id
         post.content = form.get("description","")
         post.tags = form.get("tags")
-        file2=file.read() #file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
-        post.image_data = base64.b64encode(file2)
-        size=len(file2)
-        post.image_size=size
-        db.session.add(post)
-        db.session.commit()
-        return flask.redirect(flask.url_for('index'))
+        if file.filename=='':
+            errors.append("Insérez une image ; ")
+        else:
+            file2 = file.read()  # file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
+            size = len(file2)
+            post.image_data = base64.b64encode(file2)
+            post.image_size = size
+        if post.content=='':
+            errors.append("Donnez une description à votre image ; ")
+        if post.tags=='':
+            errors.append("Associez des mots clés à votre image ; ")
+        if len(errors)==0:
+            db.session.add(post)
+            db.session.commit()
+            return flask.redirect(flask.url_for('index'))
+        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=file, errors=errors)
     else:
-        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post)
+        return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=None, errors=errors)
 
 
 @app.route("/comment/", methods=["GET", "POST"])
