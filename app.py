@@ -14,8 +14,10 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
+
 with app.test_request_context():
     init_database()
+
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'
@@ -26,6 +28,7 @@ login_manager.init_app(app)
 def load_user(user):
     # since the user_id is just the primary key of our user table, use it in the query for the user
     return database.models.User.query.filter_by(email=user).first()
+
 
 
 @app.route('/')
@@ -44,34 +47,28 @@ def create_or_process_post(post_id=None):
     post = database.models.Post.query.filter_by(id=post_id).first()
     form = request.form
     errors = []
-    if request.method == 'POST':
+    if request.method=='POST':
         if post is None:
             post = database.models.Post()
-        # récupère le file depuis le dictionnaire de tous les files
         file = request.files['file']
         post.user_id = current_user.id
-        post.content = form.get("description", "")
+        post.content = form.get("description","")
         post.tags = form.get("tags")
-        # si ya une erreur au niveau du file
-        if file.filename == '':
+        if file.filename=='':
             errors.append("Insérez une image ; ")
         else:
-            # file.read() change l'état de file directement et rend request.files illisible : on procède donc par
-            # étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
-            file2 = file.read()
+            file2 = file.read()  # file.read() change l'état de file directement et rend request.files illisible : on procède donc par étape pour récupérer la taille du fichier et stocker le fichier dans un BLOB
             size = len(file2)
             post.image_data = base64.b64encode(file2)
             post.image_size = size
-        # on vérifient que les champs sont bien complété
-        if post.content == '':
+        if post.content=='':
             errors.append("Donnez une description à votre image ; ")
-        if post.tags == '':
+        if post.tags=='':
             errors.append("Associez des mots clés à votre image ; ")
-        if len(errors) == 0:
+        if len(errors)==0:
             db.session.add(post)
             db.session.commit()
             return flask.redirect(flask.url_for('index'))
-        # on le laisse sur la même page en gardant les informations précédement remplies
         return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=file, errors=errors)
     else:
         return flask.render_template('edit_post_form.html.jinja2', form=form, post=post, file=None, errors=errors)
@@ -79,22 +76,21 @@ def create_or_process_post(post_id=None):
 
 @app.route("/comment/", methods=["GET", "POST"])
 @app.route("/comment/<post_id>", methods=["GET", "POST"])
-def comment_a_post(comment_id=None, post_id=None):
+#@app.route("/comment/<post_id>/<comment_id>", methods=["GET", "POST"])
+def comment_a_post(comment_id=None,post_id=None):
     comment = database.models.Comment.query.filter_by(id=comment_id).first()
-    # barre de texte input ie form à une seule entrée
     form = request.form
-    if request.method == 'POST':
+    if request.method=='POST':
         if comment is None:
             comment = database.models.Comment()
         comment.content = form.get("description", "")
-        if comment.content != "":
+        if comment.content!="":
             comment.user_id = current_user.id
             comment.post_id = post_id
 
             db.session.add(comment)
             db.session.commit()
 
-    # Pour rediriger sur l'endroit ou l'utilisateur naviguait
     return redirect(request.referrer)
 
 
@@ -118,29 +114,25 @@ def delete_comment(comment_id=None):
 def search():
     form = request.form
     search_string = form.get("search_string")
-    # on récupère les mots par parsing
     search_result = database.models.Post.query.filter((database.models.Post.tags.contains(search_string))).all()
+    print(search_result)
     return flask.render_template("homepage.html.jinja2", posts=search_result)
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    # tableau de bord avec les 6 infos récupérées avec des request sql
-    images_submited = current_user.posts.count()
-    size_submited = db.session.query(func.sum(database.models.Post.image_size)).filter_by(user_id=current_user.id).first()[0]
+    images_submited=current_user.posts.count()
+    size_submited=db.session.query(func.sum(database.models.Post.image_size)).filter_by(user_id=current_user.id).first()[0]
 
     images_total = database.models.Post.query.count()
-    size_total = db.session.query(func.sum(database.models.Post.image_size)).first()[0]
+    size_total=db.session.query(func.sum(database.models.Post.image_size)).first()[0]
 
-    size_liked = db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(
-        database.models.PostLike.user_id == current_user.id).first()[0]
-    images_liked = db.session.query(func.count(distinct(database.models.PostLike.post_id))).filter(
-        database.models.PostLike.user_id == current_user.id).first()[0]
+    size_liked= db.session.query(func.sum(database.models.Post.image_size)).join(database.models.PostLike).filter(database.models.PostLike.user_id==current_user.id).first()[0]
+    images_liked=db.session.query(func.count(distinct(database.models.PostLike.post_id))).filter(database.models.PostLike.user_id==current_user.id).first()[0]
 
     return flask.render_template("profile.html.jinja2", images_submited=images_submited, size_submited=size_submited,
-                                 images_total=images_total, size_total=size_total, images_liked=images_liked,
-                                 size_liked=size_liked)
+                                images_total=images_total,size_total=size_total, images_liked=images_liked, size_liked=size_liked)
 
 
 @app.route('/signup', methods=["GET"])
@@ -154,15 +146,15 @@ def signup():
     email = flask.request.form.get("email")
     password = flask.request.form.get("password")
 
-    # si le pseudo existe déjà dans la base de donnée alors un message d'erreur est envoyé
+    #si le pseudo existe déjà dans la base de donnée alors un message d'erreur est envoyé
     user = database.models.User.query.filter_by(username=username).first()
-    if user:  # si la variable user n'est pas vide
+    if user: #si la variable user n'est pas vide
         flash('Ce Pseudo existe déjà, réessayez')
         return redirect(url_for('signup'))
 
-    # si l'adresse mail existe déjà dans la base de donnée alors un message d'erreur est envoyé
+    #si l'&dresse mail existe déjà dans la base de donnée alors un message d'erreur est envoyé
     user = database.models.User.query.filter_by(email=email).first()
-    if user:  # si la variable user n'est pas vide
+    if user: #si la variable user n'est pas vide
         flash('Cette adresse mail existe déjà, réessayez')
         return redirect(url_for('signup'))
 
@@ -190,7 +182,7 @@ def login():
 
         user = database.models.User.query.filter_by(username=username).first()
 
-        if not user:
+        if not user :
             flash('Le pseudo que vous avez entré n\'est pas reconnu')
             return render_template("login.html.jinja2")
         if not check_password_hash(user.password, password):
@@ -218,6 +210,8 @@ def logout():
 def like_unlike(post_id=None, action=None):
     post = database.models.Post.query.filter_by(id=post_id).first()
     if action == 'like':
+        postlike = database.models.Post.query.filter_by(user_id=current_user.id).all()
+        print(current_user.has_liked_post(post))
         current_user.like_post(post)
         db.session.commit()
     if action == 'unlike':
@@ -226,10 +220,8 @@ def like_unlike(post_id=None, action=None):
     return redirect(request.referrer)
 
 
-# def any_function(l1, l2):
-#     return any(item in l1 for item in l2)
-# app.jinja_env.globals.update(
-#     any_function=any_function)
+def any_function(l1, l2):
+    return any(item in l1 for item in l2)
 
 
 @app.route('/follow/<user_id>', methods=["POST"])
@@ -238,7 +230,7 @@ def follow(user_id=None):
     user = database.models.Post.query.filter_by(id=user_id).first()
     current_user.follow(user)
     db.session.commit()
-    return redirect(request.referrer)
+    return flask.redirect(flask.url_for('index'))
 
 
 @app.route('/unfollow/<user_id>', methods=["POST"])
@@ -247,8 +239,11 @@ def unfollow(user_id=None):
     user = database.models.Post.query.filter_by(id=user_id).first()
     current_user.unfollow(user)
     db.session.commit()
-    return redirect(request.referrer)
+    return flask.redirect(flask.url_for('index'))
 
+
+app.jinja_env.globals.update(
+    any_function=any_function)
 
 if __name__ == '__main__':
     app.run()
