@@ -43,7 +43,7 @@
     <br>
 
     <h3>Mes Posts : {{ current_user.posts.count() }} </h3>
-    <dl class="post-list" style="display: flex" >
+    <dl class="post-list">
     {% for post in current_user.posts %}
         <div class ="encadrement-post" >
             <dt> {{ post.authorPost.username }}
@@ -52,7 +52,7 @@
                     <a href="{{ url_for("delete_post", post_id=post.id) }}">supprimer</a>
                 {% endif %}
             </dt>
-            <div class ="container-fluid">
+            <div class ="container">
                     <img class ="image-homepage" src="data:;base64,{{ post.image_data.decode('ascii') }}" alt = "Image"/>
                 </div>
                 {% if current_user.is_authenticated %}
