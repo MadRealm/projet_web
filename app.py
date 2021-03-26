@@ -33,7 +33,7 @@ def load_user(user):
 
 @app.route('/')
 def index():
-    posts = database.models.Post.query.all()
+    posts = database.models.Post.query.order_by(database.models.Post.id.desc())
     return flask.render_template("homepage.html.jinja2",
                                  posts=posts)
 
